@@ -1,0 +1,44 @@
+﻿@section Styles {
+	<link rel="stylesheet" href="~/css/BugReport.css" />
+}
+
+<div class="bugreport-container">
+	@if (User.IsInRole("Administrator"))
+	{
+		<h1>Zgłoszenia użytkowników</h1>
+	} else
+	{
+		<h1>Twoje Zgłoszenia</h1>
+	}
+	<table>
+		<thead>
+			<tr>
+				<td>Id</td>
+				@if (ViewBag.IsAdmin)
+				{
+					<td>Zgłaszający</td>
+				}
+				<td>Data zgłoszenia</td>
+				<td>Status</td>
+				<td>Opis</td>
+				<td></td>
+			</tr>
+		</thead>
+		<tbody>
+			@foreach (BugReport report in ViewBag.Reports)
+			{
+				<tr>
+					<td>@report.Id</td>
+					@if (ViewBag.IsAdmin)
+					{
+						<td>@report.User.Email</td>
+					}
+					<td>@report.DateCreated</td>
+					<td><partial name="_BugStatus"  model=@report /></td>
+					<td>@String.Join("", report.Description.Take(100))</td>
+					<td>@Html.ActionLink("Zobacz", "Details", new { Id = report.Id }, null)</td>
+				</tr>
+			}
+		</tbody>
+	</table>
+</div>

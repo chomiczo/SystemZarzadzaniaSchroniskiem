@@ -1,0 +1,8 @@
+﻿@model SystemZarzadzaniaSchroniskiem.Models.BugReportComment
+
+<form asp-action="CreateComment" asp-controller="BugReports" method="post">
+	<textarea asp-for="Content">
+
+	</textarea>
+	<input type="submit" />
+</form>

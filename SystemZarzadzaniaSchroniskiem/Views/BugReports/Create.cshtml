@@ -1,0 +1,17 @@
+﻿@model SystemZarzadzaniaSchroniskiem.Models.BugReport
+
+@section Styles {
+	<link rel="stylesheet" href="~/css/BugReport.css" />
+}
+
+<div class="bugreport-container">
+	<h1>Zgłoś błąd</h1>
+
+	<a asp-action="Index" asp-controller="BugReports">Zobacz swoje zgłoszenia</a>
+
+	<form asp-action="Create" method="post">
+		<label asp-for="Description">Opis błędu</label>
+		<textarea asp-for="Description"></textarea>
+		<input type="submit" value="Zgłoś" />
+	</form>
+</div>

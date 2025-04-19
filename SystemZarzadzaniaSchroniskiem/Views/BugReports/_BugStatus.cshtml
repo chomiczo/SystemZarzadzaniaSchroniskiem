@@ -1,0 +1,19 @@
+﻿@model SystemZarzadzaniaSchroniskiem.Models.BugReport
+
+@{
+	var status = Html.ValueFor(model => model.Status);
+}
+
+<div class="bugreport-status bugreport-status-@Html.DisplayFor(model => model.Status)">
+	@{
+		string repr = status;
+		switch (status)
+		{
+			case "Open": repr = "Otwarte"; break;
+			case "InProgress": repr = "W toku"; break;
+			case "Closed": repr = "Zamknięte"; break;
+			case "Resolved": repr = "Rozwiązane"; break;
+		}
+	}
+	@repr
+</div>

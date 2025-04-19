@@ -1,0 +1,59 @@
+﻿@page
+@using SystemZarzadzaniaSchroniskiem.Models
+@model IndexModel
+@{
+    ViewData["Title"] = "Edytuj Profil";
+    ViewData["ActivePage"] = ManageNavPages.Index;
+}
+
+@section Styles {
+    <link rel="stylesheet" type="text/css" href="~/css/Profile.css" />
+}
+
+<h3>@ViewData["Title"]</h3>
+<partial name="_StatusMessage" for="StatusMessage" />
+<div class="row justify-content-center">
+    <div class="col-md-6">
+        <form id="profile-form" method="post" enctype="multipart/form-data">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+            <div class="form-floating mb-3">
+                <input asp-for="Username" class="form-control" readonly />
+                <label asp-for="Username" class="form-label">Nazwa Użytkownika</label>
+            </div>
+
+            <div class="form-floating mb-3">
+                <input asp-for="Input.ProfilePicture" type="file" class="form-control" />
+                <label asp-for="Input.ProfilePicture" class="form-label">Ustaw avatar</label>
+                <span asp-validation-for="Input.ProfilePicture" class="text-danger"></span>
+            </div>
+
+            <!-- Password Change Fields -->
+            <div class="form-floating mb-3">
+                <input asp-for="Input.CurrentPassword" class="form-control" placeholder="Current password" />
+                <label asp-for="Input.CurrentPassword" class="form-label">Obecne Hasło</label>
+                <span asp-validation-for="Input.CurrentPassword" class="text-danger"></span>
+            </div>
+
+            <div class="form-floating mb-3">
+                <input asp-for="Input.NewPassword" class="form-control" placeholder="New password" />
+                <label asp-for="Input.NewPassword" class="form-label">Nowe Hasło</label>
+                <span asp-validation-for="Input.NewPassword" class="text-danger"></span>
+            </div>
+
+            <div class="form-floating mb-3">
+                <input asp-for="Input.ConfirmPassword" class="form-control" placeholder="Confirm new password" />
+                <label asp-for="Input.ConfirmPassword" class="form-label">Potwierdź Hasło</label>
+                <span asp-validation-for="Input.ConfirmPassword" class="text-danger"></span>
+            </div>
+
+            <button id="update-profile-button" type="submit" class="w-100 dynamic-button">Zapisz</button>
+        </form>
+    </div>
+</div>
+
+
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

@@ -1,0 +1,107 @@
+﻿@model SystemZarzadzaniaSchroniskiem.Models.BugReport
+
+@section Styles {
+	<link rel="stylesheet" href="~/css/BugReport.css" />
+}
+
+<div class="bugreport-container">
+	<div class="bugreport">
+		<div-- class="bugreport-title">
+			<h1>
+				Zgłoszenie nr @Html.DisplayFor(model => model.Id)
+			</h1>
+			<partial name="_BugStatus" />
+		</div>
+
+		@if (User.IsInRole("Administrator"))
+		{
+			<div style="display: flex; flex-direction: row; gap: 20px;">
+				Oznacz jako:
+				<div class="bugreport-controls">
+					<button class="update-status-btn" data-id="@Html.DisplayFor(model => model.Id)" data-status="Open">Otwarte</button>
+					<button class="update-status-btn" data-id="@Html.DisplayFor(model => model.Id)" data-status="InProgress">W toku</button>
+					<button class="update-status-btn" data-id="@Html.DisplayFor(model => model.Id)" data-status="Closed">Zamknięte</button>
+					<button class="update-status-btn" data-id="@Html.DisplayFor(model => model.Id)" data-status="Resolved">Rozwiązane</button>
+				</div>
+			</div>
+		}
+
+		<div class="bugreport-info">
+			<div>
+				Zgłosił: @Html.DisplayFor(model => model.User.Email)
+			</div>
+			<div>
+				Data zgłoszenia: @Html.DisplayFor(model => model.DateCreated)
+			</div>
+		</div>
+
+		<div>
+			<h4>Opis</h4>
+
+			<p class="bugreport-description">
+				@Html.DisplayFor(model=>model.Description)
+			</p>
+		</div>
+
+		<div>
+			<h4>Dyskusja</h4>
+
+			<div class="bugreport-comments">
+				@foreach (BugReportComment comment in ViewBag.Comments)
+				{
+					<div class="bugreport-comment">
+						<div class="bugreport-comment-info">
+							<div>
+								@comment.User.Email
+							</div>
+							<div class="bugreport-comment-date">
+								@comment.DateCreated
+							</div>
+						</div>
+						<p class="bugreport-comment-content">
+							@comment.Content
+						</p>
+					</div>
+				}
+			</div>
+
+			@if (Model.Status == BugReportStatus.Open || Model.Status == BugReportStatus.InProgress)
+			{
+				<form asp-action="CreateComment" method="post">
+					<input type="hidden" name="BugReportId" value="@Html.DisplayFor(model => model.Id)" />
+					<textarea name="Content" placeholder="Dodaj komentarz"></textarea>
+					<input type="submit" value="Wyślij" />
+				</form>
+			} else
+			{
+				<p style="font-size: 1rem; color: gray; text-align: center;">
+					Zgłoszenie zostało zamknięte, więc nie możesz go skomentować.
+				</p>
+			}
+		</div>
+
+	</div>
+</div>
+
+<script>
+	document.querySelectorAll('.update-status-btn').forEach((btn) => { 
+		btn.addEventListener('click', async (e) => {
+			const status = btn.getAttribute('data-status');
+			const id = btn.getAttribute('data-id');
+
+			const res = await fetch(`/BugReports/UpdateStatus/${id}`, {
+				method: 'POST',
+				body: JSON.stringify(status),
+				headers: {
+					'Content-Type': 'application/json'
+				}
+			})
+
+			if (res.status === 200) {
+				window.location.reload()
+			}
+		})
+	})
+		
+
+</script>
