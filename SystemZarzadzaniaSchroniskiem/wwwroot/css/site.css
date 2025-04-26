@@ -1,3 +1,4 @@
+﻿@import url("colors.css");
 html {
   font-size: 14px;
 }
@@ -7,9 +8,13 @@ html {
     font-size: 16px;
   }
 }
-
-.btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
-  box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
+.btn:focus,
+.btn:active:focus,
+.btn-link.nav-link:focus,
+.form-control:focus,
+.form-check-input:focus {
+  -webkit-box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
+          box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
 }
 
 html {
@@ -19,4 +24,74 @@ html {
 
 body {
   margin-bottom: 60px;
+  background: linear-gradient(80deg, var(--sc-yellow-50), var(--sc-orange-60)), linear-gradient(25deg, var(--sc-green-40), var(--sc-navy-30));
 }
+
+.navbar {
+  background-color: var(--sc-navy-80);
+}
+
+.navbar-brand {
+  color: var(--sc-beige) !important;
+  font-weight: bold;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  gap: 10px;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+}
+.navbar-brand > i {
+  font-size: 2rem;
+}
+
+.navbar .dropdown-menu {
+  background-color: var(--sc-orange-60);
+  backdrop-filter: blur(5px);
+}
+
+.navbar .dropdown-menu .dropdown-item:hover {
+  background-color: var(--sc-beige-60);
+}
+
+.navbar .dropdown-menu .dropdown-item i {
+  margin-right: 10px;
+}
+
+.footer {
+  background-color: var(--sc-orange-30);
+}
+
+h1 {
+  font-weight: 600;
+}
+
+.btn:has(> .tooltip) {
+  position: relative;
+}
+.btn > .tooltip {
+  display: none;
+  opacity: 1;
+  top: calc(100% + 5px);
+  left: 50%;
+  -webkit-transform: translate(-50%, 0);
+      -ms-transform: translate(-50%, 0);
+          transform: translate(-50%, 0);
+  width: -webkit-max-content;
+  width: -moz-max-content;
+  width: max-content;
+}
+.btn > .tooltip .tooltip-inner {
+  background-color: var(--sc-black-50);
+  backdrop-filter: blur(5px);
+}
+.btn:hover > .tooltip {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+}
+/*# sourceMappingURL=D:\dev\SystemZarzadzaniaSchroniskiem\SystemZarzadzaniaSchroniskiem\wwwroot\css\site.css.map */

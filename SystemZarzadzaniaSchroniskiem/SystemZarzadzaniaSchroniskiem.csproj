@@ -1,9 +1,10 @@
-<Project Sdk="Microsoft.NET.Sdk.Web">
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
+    <UserSecretsId>eed6ce2f-6f46-4057-ae12-3495f01ca308</UserSecretsId>
   </PropertyGroup>
 
   <ItemGroup>
@@ -21,7 +22,12 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Helpers\" />
     <Folder Include="Migrations\" />
   </ItemGroup>
+
+  <Target Name="Sass Compile" BeforeTargets="Build">
+    <Exec Command="dotnet webcompiler -r wwwroot\css" />
+  </Target>
 
 </Project>
