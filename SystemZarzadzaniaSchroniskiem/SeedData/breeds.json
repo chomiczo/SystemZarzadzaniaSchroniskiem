@@ -1,0 +1,498 @@
+[
+    {
+        "Name": "dachowiec",
+        "Species": "Cat"
+    },
+    {
+        "Name": "kundel",
+        "Species": "Dog"
+    },
+    {
+        "Name": "brytyjski krótkowłosy",
+        "Species": "Cat"
+    },
+    {
+        "Name": "selkirk rex",
+        "Species": "Cat"
+    },
+    {
+        "Name": "sfinks",
+        "Species": "Cat"
+    },
+    {
+        "Name": "cymric",
+        "Species": "Cat"
+    },
+    {
+        "Name": "syberyjski leśny",
+        "Species": "Cat"
+    },
+    {
+        "Name": "somalijski",
+        "Species": "Cat"
+    },
+    {
+        "Name": "korat",
+        "Species": "Cat"
+    },
+    {
+        "Name": "japoński bobtail",
+        "Species": "Cat"
+    },
+    {
+        "Name": "szynszylowy",
+        "Species": "Cat"
+    },
+    {
+        "Name": "tonkijski",
+        "Species": "Cat"
+    },
+    {
+        "Name": "egzotyczny",
+        "Species": "Cat"
+    },
+    {
+        "Name": "egipski mau",
+        "Species": "Cat"
+    },
+    {
+        "Name": "devon rex",
+        "Species": "Cat"
+    },
+    {
+        "Name": "khao manee",
+        "Species": "Cat"
+    },
+    {
+        "Name": "australijski mist",
+        "Species": "Cat"
+    },
+    {
+        "Name": "abisyński",
+        "Species": "Cat"
+    },
+    {
+        "Name": "snowshoe",
+        "Species": "Cat"
+    },
+    {
+        "Name": "bengalski",
+        "Species": "Cat"
+    },
+    {
+        "Name": "amerykański szorstkowłosy",
+        "Species": "Cat"
+    },
+    {
+        "Name": "maine coon",
+        "Species": "Cat"
+    },
+    {
+        "Name": "burmilla",
+        "Species": "Cat"
+    },
+    {
+        "Name": "cornish rex",
+        "Species": "Cat"
+    },
+    {
+        "Name": "manx",
+        "Species": "Cat"
+    },
+    {
+        "Name": "savannah",
+        "Species": "Cat"
+    },
+    {
+        "Name": "syjamski",
+        "Species": "Cat"
+    },
+    {
+        "Name": "tiffanie",
+        "Species": "Cat"
+    },
+    {
+        "Name": "perski",
+        "Species": "Cat"
+    },
+    {
+        "Name": "birmański",
+        "Species": "Cat"
+    },
+    {
+        "Name": "szkocki zwisłouchy",
+        "Species": "Cat"
+    },
+    {
+        "Name": "ragdoll",
+        "Species": "Cat"
+    },
+    {
+        "Name": "la perm",
+        "Species": "Cat"
+    },
+    {
+        "Name": "rosyjski niebieski",
+        "Species": "Cat"
+    },
+    {
+        "Name": "pixiebob",
+        "Species": "Cat"
+    },
+    {
+        "Name": "bombajski",
+        "Species": "Cat"
+    },
+    {
+        "Name": "orientalny długowłosy",
+        "Species": "Cat"
+    },
+    {
+        "Name": "singapurski",
+        "Species": "Cat"
+    },
+    {
+        "Name": "munchkin",
+        "Species": "Cat"
+    },
+    {
+        "Name": "norweski leśny",
+        "Species": "Cat"
+    },
+    {
+        "Name": "azjatycki",
+        "Species": "Cat"
+    },
+    {
+        "Name": "balijski",
+        "Species": "Cat"
+    },
+    {
+        "Name": "burmski",
+        "Species": "Cat"
+    },
+    {
+        "Name": "orientalny krótkowłosy",
+        "Species": "Cat"
+    },
+    {
+        "Name": "ocicat",
+        "Species": "Cat"
+    },
+    {
+        "Name": "turecki van",
+        "Species": "Cat"
+    },
+    {
+        "Species": "Dog",
+        "Name": "akita"
+    },
+    {
+        "Species": "Dog",
+        "Name": "affenpinscher"
+    },
+    {
+        "Species": "Dog",
+        "Name": "basenji"
+    },
+    {
+        "Species": "Dog",
+        "Name": "basset"
+    },
+    {
+        "Species": "Dog",
+        "Name": "beagle"
+    },
+    {
+        "Species": "Dog",
+        "Name": "bernardyn"
+    },
+    {
+        "Species": "Dog",
+        "Name": "bichon"
+    },
+    {
+        "Species": "Dog",
+        "Name": "bloodhound"
+    },
+    {
+        "Species": "Dog",
+        "Name": "bokser"
+    },
+    {
+        "Species": "Dog",
+        "Name": "border collie"
+    },
+    {
+        "Species": "Dog",
+        "Name": "borzoj"
+    },
+    {
+        "Species": "Dog",
+        "Name": "buldog"
+    },
+    {
+        "Species": "Dog",
+        "Name": "chart"
+    },
+    {
+        "Species": "Dog",
+        "Name": "chihuahua"
+    },
+    {
+        "Species": "Dog",
+        "Name": "cocker spaniel"
+    },
+    {
+        "Species": "Dog",
+        "Name": "collie"
+    },
+    {
+        "Species": "Dog",
+        "Name": "coton de tulear"
+    },
+    {
+        "Species": "Dog",
+        "Name": "dalmatyńczyk"
+    },
+    {
+        "Species": "Dog",
+        "Name": "doberman"
+    },
+    {
+        "Species": "Dog",
+        "Name": "dog niemiecki"
+    },
+    {
+        "Species": "Dog",
+        "Name": "dog z bordeaux"
+    },
+    {
+        "Species": "Dog",
+        "Name": "elkhound"
+    },
+    {
+        "Species": "Dog",
+        "Name": "finnish lapphund"
+    },
+    {
+        "Species": "Dog",
+        "Name": "fox terrier"
+    },
+    {
+        "Species": "Dog",
+        "Name": "golden retriever"
+    },
+    {
+        "Species": "Dog",
+        "Name": "greyhound"
+    },
+    {
+        "Species": "Dog",
+        "Name": "hawańczyk"
+    },
+    {
+        "Species": "Dog",
+        "Name": "husky"
+    },
+    {
+        "Species": "Dog",
+        "Name": "jamnik"
+    },
+    {
+        "Species": "Dog",
+        "Name": "japoński chin"
+    },
+    {
+        "Species": "Dog",
+        "Name": "japoński spitz"
+    },
+    {
+        "Species": "Dog",
+        "Name": "kerry blue terrier"
+    },
+    {
+        "Species": "Dog",
+        "Name": "king charles spaniel"
+    },
+    {
+        "Species": "Dog",
+        "Name": "komondor"
+    },
+    {
+        "Species": "Dog",
+        "Name": "labrador retriever"
+    },
+    {
+        "Species": "Dog",
+        "Name": "leonberger"
+    },
+    {
+        "Species": "Dog",
+        "Name": "lhasa apso"
+    },
+    {
+        "Species": "Dog",
+        "Name": "lowchen"
+    },
+    {
+        "Species": "Dog",
+        "Name": "maltańczyk"
+    },
+    {
+        "Species": "Dog",
+        "Name": "mastif"
+    },
+    {
+        "Species": "Dog",
+        "Name": "miniaturowy pinczer"
+    },
+    {
+        "Species": "Dog",
+        "Name": "nowofundland"
+    },
+    {
+        "Species": "Dog",
+        "Name": "owczarek australijski"
+    },
+    {
+        "Species": "Dog",
+        "Name": "owczarek belgijski"
+    },
+    {
+        "Species": "Dog",
+        "Name": "owczarek niemiecki"
+    },
+    {
+        "Species": "Dog",
+        "Name": "owczarek nizinny"
+    },
+    {
+        "Species": "Dog",
+        "Name": "owczarek pirenejski"
+    },
+    {
+        "Species": "Dog",
+        "Name": "papillon"
+    },
+    {
+        "Species": "Dog",
+        "Name": "pekińczyk"
+    },
+    {
+        "Species": "Dog",
+        "Name": "pharaoh hound"
+    },
+    {
+        "Species": "Dog",
+        "Name": "pies wodny"
+    },
+    {
+        "Species": "Dog",
+        "Name": "pinczer"
+    },
+    {
+        "Species": "Dog",
+        "Name": "pointer"
+    },
+    {
+        "Species": "Dog",
+        "Name": "pomeranian"
+    },
+    {
+        "Species": "Dog",
+        "Name": "pudel"
+    },
+    {
+        "Species": "Dog",
+        "Name": "puli"
+    },
+    {
+        "Species": "Dog",
+        "Name": "ratlerek"
+    },
+    {
+        "Species": "Dog",
+        "Name": "retriever"
+    },
+    {
+        "Species": "Dog",
+        "Name": "ridgeback"
+    },
+    {
+        "Species": "Dog",
+        "Name": "rottweiler"
+    },
+    {
+        "Species": "Dog",
+        "Name": "samoyed"
+    },
+    {
+        "Species": "Dog",
+        "Name": "schipperke"
+    },
+    {
+        "Species": "Dog",
+        "Name": "seter"
+    },
+    {
+        "Species": "Dog",
+        "Name": "shar pei"
+    },
+    {
+        "Species": "Dog",
+        "Name": "shih tzu"
+    },
+    {
+        "Species": "Dog",
+        "Name": "spaniel"
+    },
+    {
+        "Species": "Dog",
+        "Name": "spitz"
+    },
+    {
+        "Species": "Dog",
+        "Name": "szpic wilczy"
+    },
+    {
+        "Species": "Dog",
+        "Name": "sznaucer"
+    },
+    {
+        "Species": "Dog",
+        "Name": "terier"
+    },
+    {
+        "Species": "Dog",
+        "Name": "tibetan mastiff"
+    },
+    {
+        "Species": "Dog",
+        "Name": "toller"
+    },
+    {
+        "Species": "Dog",
+        "Name": "vizsla"
+    },
+    {
+        "Species": "Dog",
+        "Name": "weimaraner"
+    },
+    {
+        "Species": "Dog",
+        "Name": "welsh corgi"
+    },
+    {
+        "Species": "Dog",
+        "Name": "whippet"
+    },
+    {
+        "Species": "Dog",
+        "Name": "wolfdog"
+    },
+    {
+        "Species": "Dog",
+        "Name": "yorkshire terrier"
+    }
+]

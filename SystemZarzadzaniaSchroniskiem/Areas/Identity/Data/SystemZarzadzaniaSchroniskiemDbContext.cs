@@ -36,8 +36,11 @@ namespace SystemZarzadzaniaSchroniskiem.Areas.Identity.Data
             // Add your customizations after calling base.OnModelCreating(builder);
         }
 
-        public DbSet<SystemZarzadzaniaSchroniskiem.Models.Userek> Userek { get; set; }
-        public DbSet<SystemZarzadzaniaSchroniskiem.Models.BugReport>? BugReports { get; set; }
-        public DbSet<SystemZarzadzaniaSchroniskiem.Models.BugReportComment>? BugReportComments { get; set; }
+        public DbSet<Userek> Userek { get; set; }
+        public DbSet<BugReport> BugReports { get; set; }
+        public DbSet<BugReportComment> BugReportComments { get; set; }
+        public DbSet<Pet> Pets { get; set; }
+        public DbSet<Breed> Breeds { get; set; }
+        public DbSet<HealthRecord> HealthRecords { get; set; }
     }
 }

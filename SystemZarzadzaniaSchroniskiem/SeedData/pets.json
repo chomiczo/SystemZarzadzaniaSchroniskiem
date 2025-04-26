@@ -1,0 +1,57 @@
+[
+  {
+    "AdmissionDate": "2023-08-11T11:12:00",
+    "AdoptionStatus": "AvailableForAdoption",
+    "BirthDate": "2020-03-13",
+    "Breed": "jamnik",
+    "Description": "",
+    "Gender": "Male",
+    "Name": "Azor",
+    "Species": "Dog",
+    "Weight": 15.0
+  },
+  {
+    "AdmissionDate": "2024-11-11",
+    "AdoptionStatus": "InTemporaryHome",
+    "BirthDate": "2019-03-30",
+    "Breed": "maine coon",
+    "Description": "",
+    "Gender": "Male",
+    "Name": "Mruczek",
+    "Species": "Cat",
+    "Weight": 10.3
+  },
+  {
+    "AdmissionDate": "2021-05-11T18:01:10",
+    "AdoptionStatus": "AdoptionCompleted",
+    "BirthDate": "2020-03-13",
+    "Breed": "sznaucer",
+    "Description": "",
+    "Gender": "Female",
+    "Name": "Pusia",
+    "Species": "Dog",
+    "Weight": 5.0
+  },
+  {
+    "AdmissionDate": "2025-04-01T08:21:11",
+    "AdoptionStatus": "Admitted",
+    "BirthDate": "2016-03-13",
+    "Breed": "kundel",
+    "Description": "",
+    "Gender": "Male",
+    "Name": "Burek",
+    "Species": "Dog",
+    "Weight": 25.0
+  },
+  {
+    "AdmissionDate": "2023-04-01T12:59:01",
+    "AdoptionStatus": "Deceased",
+    "BirthDate": "2006-03-13",
+    "Breed": "dachowiec",
+    "Description": "",
+    "Gender": "Male",
+    "Name": "Filemon",
+    "Species": "Cat",
+    "Weight": 4.1
+  }
+]

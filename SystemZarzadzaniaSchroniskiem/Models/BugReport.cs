@@ -13,9 +13,9 @@ namespace SystemZarzadzaniaSchroniskiem.Models
     public class BugReport
     {
         public int Id { get; set; }
-        public string UserId {  get; set; }
-        public IdentityUser User { get; set; }
-        public string Description { get; set; }
+        public string UserId { get; set; } = null!;
+        public IdentityUser User { get; set; } = null!;
+        public string Description { get; set; } = null!;
         public BugReportStatus Status { get; set; }
         public DateTime DateCreated { get; set; }
     }
@@ -23,10 +23,10 @@ namespace SystemZarzadzaniaSchroniskiem.Models
     public class BugReportComment
     {
         public int Id { get; set; }
-        public string UserId {  get; set; }
-        public IdentityUser User { get; set; }
+        public string UserId { get; set; } = null!; 
+        public IdentityUser User { get; set; } = null!;
         public int BugReportId { get; set; }
         public DateTime DateCreated { get; set; }
-        public string Content { get; set; }
+        public string Content { get; set; } = null!;
     }
 }

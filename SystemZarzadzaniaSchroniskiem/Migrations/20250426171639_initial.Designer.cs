@@ -12,8 +12,8 @@ using SystemZarzadzaniaSchroniskiem.Areas.Identity.Data;
 namespace SystemZarzadzaniaSchroniskiem.Migrations
 {
     [DbContext(typeof(SystemZarzadzaniaSchroniskiemDbContext))]
-    [Migration("20250419210049_Init")]
-    partial class Init
+    [Migration("20250426171639_initial")]
+    partial class initial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -223,6 +223,29 @@ namespace SystemZarzadzaniaSchroniskiem.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
+            modelBuilder.Entity("SystemZarzadzaniaSchroniskiem.Models.Breed", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<int>("Species")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Name")
+                        .IsUnique();
+
+                    b.ToTable("Breeds");
+                });
+
             modelBuilder.Entity("SystemZarzadzaniaSchroniskiem.Models.BugReport", b =>
                 {
                     b.Property<int>("Id")
@@ -281,6 +304,74 @@ namespace SystemZarzadzaniaSchroniskiem.Migrations
                     b.ToTable("BugReportComments");
                 });
 
+            modelBuilder.Entity("SystemZarzadzaniaSchroniskiem.Models.HealthRecord", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Content")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("CreationDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("PetId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("PetId");
+
+                    b.ToTable("HealthRecords");
+                });
+
+            modelBuilder.Entity("SystemZarzadzaniaSchroniskiem.Models.Pet", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("AdmissionDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("AdoptionStatus")
+                        .HasColumnType("int");
+
+                    b.Property<DateOnly?>("BirthDate")
+                        .HasColumnType("date");
+
+                    b.Property<int>("BreedId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Gender")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Species")
+                        .HasColumnType("int");
+
+                    b.Property<double>("Weight")
+                        .HasColumnType("float");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("BreedId");
+
+                    b.ToTable("Pets");
+                });
+
             modelBuilder.Entity("SystemZarzadzaniaSchroniskiem.Models.Userek", b =>
                 {
                     b.Property<int>("Id")
@@ -302,6 +393,7 @@ namespace SystemZarzadzaniaSchroniskiem.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("UserId")
+                        .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
@@ -384,11 +476,35 @@ namespace SystemZarzadzaniaSchroniskiem.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("SystemZarzadzaniaSchroniskiem.Models.HealthRecord", b =>
+                {
+                    b.HasOne("SystemZarzadzaniaSchroniskiem.Models.Pet", "Pet")
+                        .WithMany()
+                        .HasForeignKey("PetId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Pet");
+                });
+
+            modelBuilder.Entity("SystemZarzadzaniaSchroniskiem.Models.Pet", b =>
+                {
+                    b.HasOne("SystemZarzadzaniaSchroniskiem.Models.Breed", "Breed")
+                        .WithMany()
+                        .HasForeignKey("BreedId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Breed");
+                });
+
             modelBuilder.Entity("SystemZarzadzaniaSchroniskiem.Models.Userek", b =>
                 {
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", "User")
                         .WithMany()
-                        .HasForeignKey("UserId");
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("User");
                 });

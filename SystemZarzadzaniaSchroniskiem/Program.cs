@@ -26,7 +26,7 @@ public class Program
                 var userManager = services.GetRequiredService<UserManager<IdentityUser>>();
                 var roleManager = services.GetRequiredService<RoleManager<IdentityRole>>();
 
-                var roles = new string[] { "Administrator", "InnaRola" };
+                var roles = new string[] { "Administrator", "Employee", "Volunteer", "Adopter" };
                 foreach (var roleName in roles)
                 {
                     var roleExist = await roleManager.RoleExistsAsync(roleName);

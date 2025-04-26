@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace SystemZarzadzaniaSchroniskiem.Migrations
 {
     /// <inheritdoc />
-    public partial class Init : Migration
+    public partial class initial : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -48,6 +48,20 @@ namespace SystemZarzadzaniaSchroniskiem.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_AspNetUsers", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Breeds",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    Species = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Breeds", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -209,7 +223,7 @@ namespace SystemZarzadzaniaSchroniskiem.Migrations
                     FirstName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     LastName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Email = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: true)
+                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -218,7 +232,56 @@ namespace SystemZarzadzaniaSchroniskiem.Migrations
                         name: "FK_Userek_AspNetUsers_UserId",
                         column: x => x.UserId,
                         principalTable: "AspNetUsers",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Pets",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    AdmissionDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    AdoptionStatus = table.Column<int>(type: "int", nullable: false),
+                    BirthDate = table.Column<DateOnly>(type: "date", nullable: true),
+                    Weight = table.Column<double>(type: "float", nullable: false),
+                    Species = table.Column<int>(type: "int", nullable: false),
+                    Gender = table.Column<int>(type: "int", nullable: false),
+                    BreedId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Pets", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Pets_Breeds_BreedId",
+                        column: x => x.BreedId,
+                        principalTable: "Breeds",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "HealthRecords",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    PetId = table.Column<int>(type: "int", nullable: false),
+                    CreationDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Content = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_HealthRecords", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_HealthRecords_Pets_PetId",
+                        column: x => x.PetId,
+                        principalTable: "Pets",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(
@@ -261,6 +324,12 @@ namespace SystemZarzadzaniaSchroniskiem.Migrations
                 filter: "[NormalizedUserName] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Breeds_Name",
+                table: "Breeds",
+                column: "Name",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
                 name: "IX_BugReportComments_UserId",
                 table: "BugReportComments",
                 column: "UserId");
@@ -269,6 +338,16 @@ namespace SystemZarzadzaniaSchroniskiem.Migrations
                 name: "IX_BugReports_UserId",
                 table: "BugReports",
                 column: "UserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_HealthRecords_PetId",
+                table: "HealthRecords",
+                column: "PetId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Pets_BreedId",
+                table: "Pets",
+                column: "BreedId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Userek_UserId",
@@ -301,13 +380,22 @@ namespace SystemZarzadzaniaSchroniskiem.Migrations
                 name: "BugReports");
 
             migrationBuilder.DropTable(
+                name: "HealthRecords");
+
+            migrationBuilder.DropTable(
                 name: "Userek");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");
 
             migrationBuilder.DropTable(
+                name: "Pets");
+
+            migrationBuilder.DropTable(
                 name: "AspNetUsers");
+
+            migrationBuilder.DropTable(
+                name: "Breeds");
         }
     }
 }

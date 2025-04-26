@@ -8,16 +8,16 @@ namespace SystemZarzadzaniaSchroniskiem.Models
         public int Id { get; set; }
 
         [Required(ErrorMessage = "Pole Imię jest wymagane.")]
-        public string FirstName { get; set; }
+        public string FirstName { get; set; } = null!;
 
         [Required(ErrorMessage = "Pole Nazwisko jest wymagane.")]
-        public string LastName { get; set; }
+        public string LastName { get; set; } = null!;
 
         [Required(ErrorMessage = "Pole Email jest wymagane.")]
         [EmailAddress(ErrorMessage = "Niepoprawny format adresu email.")]
-        public string Email { get; set; }
+        public string Email { get; set; } = null!;
 
-        public string? UserId { get; set; }
+        public string UserId { get; set; } = null!;
         public virtual IdentityUser? User { get; set; }
     }
 }
