@@ -1,0 +1,62 @@
+﻿<div class="d-flex flex-column gap-5">
+	<h1>
+		<i class="bi bi-database position-relative">
+			<i class="fas fa-cat position-absolute" style="top: 0; right: 20px; font-size: 1rem; background-color: var(--sc-beige);"> </i>
+		</i>
+
+		Baza Zwierząt
+	</h1>
+
+	<div>
+	<ul class="nav nav-tabs" role="tablist">
+		<li class="nav-item" role="presentation">
+			<button
+				class="nav-link active"
+				id="pets-tab"
+				data-bs-toggle="tab"
+				data-bs-target="#pets-tab-pane"
+				type="button"
+				role="tab"
+				aria-controls="pets-tab-pane"
+				aria-selected="true">
+				Zwierzęta
+			</button>
+		</li>
+
+		<li class="nav-item" role="presentation">
+			<button
+				class="nav-link"
+				id="breeds-tab"
+				data-bs-toggle="tab"
+				data-bs-target="#breeds-tab-pane"
+				type="button"
+				role="tab"
+				aria-controls="breeds-tab-pane"
+				aria-selected="false">
+				Rasy
+			</button>
+		</li>
+	</ul>
+
+	<div class="container p-4 rounded-bottom" id="pets-content">
+		<div class="tab-content">
+			<div class="tab-pane fade show active" id="pets-tab-pane" role="tabpanel" aria-labelledby="pets-tab" tabindex="0">
+				<partial name="_Pets" />
+			</div>
+
+			<div class="tab-pane fade" id="breeds-tab-pane" role="tabpanel" aria-labelledby="breeds-tab" tabindex="0">
+				Breeds
+			</div>
+		</div>
+	</div>
+	</div>
+</div>
+
+@section Styles {
+    <style>
+        #pets-content {
+            background-color: var(--sc-white-30);
+        }
+    </style>
+}
+

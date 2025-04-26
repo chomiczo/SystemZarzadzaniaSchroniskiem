@@ -1,0 +1,128 @@
+﻿@model IEnumerable<SystemZarzadzaniaSchroniskiem.Models.Pet>
+
+<ul class="list-group">
+	@foreach (var pet in Model)
+	{
+		<li class="list-group-item pet-list-item">
+			<div class="container">
+				<div class="row">
+					<div class="col-2">
+						@if (pet.Species == Species.Dog)
+						{
+							<i class="fas fa-dog" style="font-size: 1.5rem;"></i>
+						} else
+						{
+							<i class="fas fa-cat" style="font-size: 1.5rem;"></i>
+						}
+						&nbsp;
+						@if (pet.Gender == Gender.Male)
+						{
+							<i class="bi bi-gender-male fw-bold"></i>
+						} else
+						{
+							<i class="bi bi-gender-female fw-bold"></i>
+						}
+						@Html.DisplayFor(_ => pet.Name)
+					</div>
+
+					<div class="col-2">
+						<small class="badge pet-status-badge pet-status-@pet.AdoptionStatus">
+							@Html.DisplayFor(_ => pet.AdoptionStatus)
+						</small>
+					</div>
+
+					<div class="col-2">
+						@Html.DisplayFor(_ => pet.Breed.Name),
+						@{
+							var age = (int)( DateTime.Now.Subtract(new DateTime(pet.BirthDate ?? new DateOnly(), new TimeOnly())).TotalDays / 365);
+						}
+						@age lat
+					</div>
+
+					<div class="col-6 d-flex justify-content-end" style="gap: 10px;">
+						<button class="btn btn-sm btn-primary">
+							<i class="far fa-pen-to-square"></i>
+
+							Edytuj
+
+							<div class="tooltip">
+								<div class="tooltip-inner">Edytuj zwierzę</div>
+							</div>
+						</button>
+
+						<button class="btn btn-sm btn-outline-danger">
+							<i class="fas fa-trash-can"></i>
+
+							Usuń
+
+							<div class="tooltip">
+								<div class="tooltip-inner">Usuń zwierzę</div>
+							</div>
+						</button>
+
+						<button class="btn btn-secondary btn-sm pet-collapse-btn" data-bs-toggle="collapse" data-bs-target="#collapse-@pet.Id" aria-expanded="false">
+							<i class="fas pet-collapse-icon"></i>
+
+							<span class="pet-collapse-text">Szczegóły</span>
+						</button>
+					</div>
+				</div>
+				<div class="row collapse" id="collapse-@pet.Id">
+					<div class="container">
+						More info on the pet.
+					</div>
+				</div>
+			</div>
+	</li>
+}
+</ul>
+
+<style>
+	.pet-status-badge {
+		width: 100%;
+	}
+
+	.pet-collapse-btn {
+		display: inline-flex;
+		justify-content: center;
+		align-items: center;
+		gap: 10px;
+	}
+
+	.pet-collapse-btn[aria-expanded=false] .pet-collapse-icon::before {
+		content: var(--fa-chevron-down);
+	}
+
+	.pet-collapse-btn[aria-expanded=true] .pet-collapse-icon::before {
+		content: "\f077";
+	}
+
+	.pet-status-Admitted {
+		background-color: var(--sc-yellow);
+		color: #000;
+	}
+
+	.pet-status-AvailableForAdoption {
+		background-color: var(--sc-blue);
+	}
+
+	.pet-status-Deceased {
+		background-color: var(--sc-black-50);
+	}
+
+	.pet-status-InTemporaryHome {
+		background-color: var(--sc-lightblue);
+	}
+
+	.pet-status-AdoptionCompleted {
+		background-color: var(--sc-green);
+	}
+
+	.pet-list-item .bi-gender-male {
+		color: var(--sc-blue);
+	}
+
+	.pet-list-item .bi-gender-female {
+		color: var(--bs-pink);
+	}
+</style>
