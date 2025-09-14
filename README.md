@@ -5,7 +5,7 @@
 ## Technologie
 
 - [![C#](https://img.shields.io/badge/Language-C%23-blue)](https://learn.microsoft.com/en-us/dotnet/csharp/)
-- [![.NET 8.0](https://img.shields.io/badge/.NET-6.0-purple)](https://dotnet.microsoft.com/en-us/download/dotnet/8.0)
+- [![.NET 8.0](https://img.shields.io/badge/.NET-8.0-purple)](https://dotnet.microsoft.com/en-us/download/dotnet/8.0)
 - [![ASP.NET Core MVC](https://img.shields.io/badge/ASP.NET%20Core%20MVC-Framework-lightblue)](https://learn.microsoft.com/en-us/aspnet/core/mvc/)
 - [![EntityFramework Core](https://img.shields.io/badge/EntityFramework%20Core-ORM-green)](https://learn.microsoft.com/en-us/ef/core/)
 - [![Microsoft SQL Server](https://img.shields.io/badge/Microsoft%20SQL%20Server-Database-blue)](https://www.microsoft.com/en-us/sql-server)
