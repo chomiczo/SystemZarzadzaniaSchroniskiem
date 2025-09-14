@@ -37,5 +37,5 @@ W przypadku, gdy po sklonowaniu repozytorium w folderze Migrations znajdują si�
 W razie napotkanych problemów można usunąć migracje wraz ze snapshotem bazy, a następnie samą bazę.
 W kolejnym kroku ponownie wykonać ponownie wyżej wymienione komendy w punkcie 2.
 
-## Autorzy
-Aleksander Chomicz, Mateusz Szymański, Mikołaj Jagodziński
+## Autor
+Aleksander Chomicz
