@@ -1,101 +1,129 @@
-@import url('colors.css');
+@import '_colors';
 
-
-html {
-    font-size: 14px;
-}
-
-@media (min-width: 768px) {
-    html {
-        font-size: 16px;
-    }
-}
-
-.btn:focus,
-.btn:active:focus,
-.btn-link.nav-link:focus,
-.form-control:focus,
-.form-check-input:focus {
-    box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
-}
-
-html {
-    position: relative;
-    min-height: 100%;
+:root {
+  --sc-font: system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue',
+    Arial, 'Noto Sans', 'Liberation Sans', sans-serif, 'Apple Color Emoji',
+    'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
 }
 
 body {
-    margin-bottom: 60px;
-    background:
-        linear-gradient(80deg,
-            var(--sc-yellow-50),
-            var(--sc-orange-60)),
-        linear-gradient(25deg,
-            var(--sc-green-40),
-            var(--sc-navy-30));
+  background: linear-gradient(80deg, var(--sc-yellow-50), var(--sc-orange-60)),
+    linear-gradient(25deg, var(--sc-green-40), var(--sc-navy-30));
+  background-attachment: fixed;
+  font-family: var(--sc-font);
 }
 
-.navbar {
-    background-color: var(--sc-navy-80);
+header {
+  background-color: var(--sc-navy);
 }
 
-.navbar-brand {
-    color: var(--sc-beige) !important;
-    font-weight: bold;
+* {
+  &:has(> .sc-tooltip) {
+    position: relative;
+  }
+
+  & > .sc-tooltip {
+    position: absolute;
+    display: none;
+    opacity: 1;
+    top: calc(100% + 5px);
+    left: 50%;
+    transform: translate(-50%, 0);
+    width: max-content;
+    z-index: 1000;
+
+    & .sc-tooltip-inner {
+      background-color: var(--sc-black-50);
+      color: white;
+      padding: 10px;
+      backdrop-filter: blur(5px);
+      font-family: var(--sc-font);
+      font-weight: 400;
+      font-size: 1rem;
+      border-radius: 5px;
+    }
+  }
+
+  &:hover > .sc-tooltip {
     display: flex;
-    gap: 10px;
-    justify-content: center;
-    align-items: center;
+  }
+}
 
-    &>i {
-        font-size: 2rem;
+.pet-status-badge {
+  width: 100%;
+
+  &.pet-status {
+    &-AvailableForAdoption {
+      background-color: $sc-orange;
     }
-}
-
-.navbar .dropdown-menu {
-    background-color: var(--sc-orange-60);
-    backdrop-filter: blur(5px);
-}
-
-.navbar .dropdown-menu .dropdown-item:hover {
-    background-color: var(--sc-beige-60);
-
-}
-
-.navbar .dropdown-menu .dropdown-item i {
-    margin-right: 10px;
-
-}
-
-.footer {
-    background-color: var(--sc-orange-30);
-}
-
-h1 {
-    font-weight: 600;
-}
-
-.btn {
-    &:has(> .tooltip) {
-        position: relative;
+    &-Deceased {
+      background-color: var(--sc-black-40);
     }
-
-    &>.tooltip {
-
-        display: none;
-        opacity: 1;
-        top: calc(100% + 5px);
-        left: 50%;
-        transform: translate(-50%, 0);
-        width: max-content;
-
-        & .tooltip-inner {
-            background-color: var(--sc-black-50);
-            backdrop-filter: blur(5px);
-        }
+    &-InTemporaryHome {
+      background-color: $sc-lightblue;
     }
-
-    &:hover>.tooltip {
-        display: flex;
+    &-AdoptionCompleted {
+      background-color: var(--sc-green);
     }
+    &-Admitted {
+      background-color: $sc-yellow;
+    }
+  }
+}
+
+.alert-danger {
+  background-color: var(--sc-red);
+  color: white;
+}
+
+.validation-summary-errors ul {
+  list-style: none;
+  padding: 0;
+}
+
+@import '../lib/bootstrap-scss/_functions.scss';
+@import '../lib/bootstrap-scss/_variables.scss';
+@import '../lib/bootstrap-scss/_mixins.scss';
+
+$theme-colors: (
+  'primary': $sc-lightnavy,
+  'secondary': $sc-navy,
+  'danger': $sc-red,
+  'success': $sc-green,
+  'info': $sc-lightblue,
+  'warning': $sc-yellow,
+  'dark': $sc-black,
+  'light': $sc-white,
+);
+
+.bg-orange {
+  background-color: $sc-orange !important;
+}
+
+.dropdown-menu {
+  background-color: var(--sc-orange-50) !important;
+  backdrop-filter: blur(10px);
+
+  & .dropdown-item {
+    color: $sc-navy !important;
+    transition: all 0.2s;
+
+    &:hover {
+      color: $sc-white !important;
+      background-color: var(--sc-blue-30) !important;
+    }
+  }
+}
+
+.page-title {
+  display: flex;
+  gap: 20px;
+  align-items: center;
+}
+
+@import '../lib/bootstrap-scss/bootstrap.scss';
+
+table {
+  overflow: auto;
+  max-width: 100%;
 }

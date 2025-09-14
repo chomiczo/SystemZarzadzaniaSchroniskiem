@@ -9,16 +9,16 @@ namespace SystemZarzadzaniaSchroniskiem.Services
     {
         public BugReport? Report { get; set; }
         public BugReportComment? Comment { get; set; }
-}
+    }
 
 
     public class BugReportService
     {
-        private readonly SystemZarzadzaniaSchroniskiemDbContext _context;
+        private readonly SchroniskoDbContext _context;
         private readonly IEmailSender _emailSender;
         private readonly UserManager<IdentityUser> _userManager;
 
-        public BugReportService(SystemZarzadzaniaSchroniskiemDbContext context, IEmailSender emailSender, UserManager<IdentityUser> userManager)
+        public BugReportService(SchroniskoDbContext context, IEmailSender emailSender, UserManager<IdentityUser> userManager)
         {
             _context = context;
             _emailSender = emailSender;

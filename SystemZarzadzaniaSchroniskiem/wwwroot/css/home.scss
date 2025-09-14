@@ -1,0 +1,62 @@
+@import 'site';
+
+.home-container {
+  display: grid;
+  grid-template-areas: 'pet help' 'med help';
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+
+  @include media-breakpoint-down(md) {
+    grid-template-columns: 1fr;
+    grid-template-areas: 'pet' 'help' 'med';
+  }
+
+  .home-card {
+    border: 0;
+    transition: box-shadow 0.2s;
+
+    .card-header {
+      display: flex;
+      justify-content: space-evenly;
+      align-items: center;
+      padding: 16px 8px;
+    }
+
+    &:hover {
+        box-shadow: var(--bs-box-shadow-lg) !important;
+    }
+  }
+
+  #home-card {
+    &-help {
+      grid-area: help;
+      grid-column: 2;
+      grid-row: 1 / span 2;
+
+      & > .card-header {
+        background-color: var(--sc-orange-80);
+      }
+
+      @include media-breakpoint-down(md) {
+        grid-column: auto;
+        grid-row: auto;
+      }
+    }
+
+    &-pet{
+      grid-area: pet;
+
+      & > .card-header {
+        background-color: var(--sc-yellow-80);
+      }
+    }
+
+    &-med {
+      grid-area: med;
+
+      & > .card-header {
+        background-color: var(--sc-blue-30);
+      }
+    }
+  }
+}

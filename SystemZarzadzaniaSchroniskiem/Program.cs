@@ -1,10 +1,6 @@
-using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
 using Microsoft.AspNetCore.Identity;
 using SystemZarzadzaniaSchroniskiem;
-using SystemZarzadzaniaSchroniskiem.Services;
 using SystemZarzadzaniaSchroniskiem.Areas.Identity.Data;
 
 public class Program
@@ -20,13 +16,19 @@ public class Program
 
             try
             {
-                var dbContext = services.GetRequiredService<SystemZarzadzaniaSchroniskiemDbContext>();
+                var dbContext = services.GetRequiredService<SystemZarzadzaniaSchroniskiem.Areas.Identity.Data.SchroniskoDbContext>();
                 dbContext.Database.Migrate();
 
                 var userManager = services.GetRequiredService<UserManager<IdentityUser>>();
                 var roleManager = services.GetRequiredService<RoleManager<IdentityRole>>();
 
-                var roles = new string[] { "Administrator", "Employee", "Volunteer", "Adopter" };
+                var roles = new string[] {
+                    "Administrator",
+                    "Employee",
+                    "Volunteer",
+                    "Adopter",
+                    "Veterinarian"
+                };
                 foreach (var roleName in roles)
                 {
                     var roleExist = await roleManager.RoleExistsAsync(roleName);
@@ -55,8 +57,8 @@ public class Program
                 logging.ClearProviders();
                 logging.AddConsole();
 
-                var path = Path.Combine(Directory.GetCurrentDirectory(), "log.txt");
-                logging.AddProvider(new FileLoggerProvider(path));
+                // var path = Path.Combine(Directory.GetCurrentDirectory(), "log.txt");
+                // logging.AddProvider(new FileLoggerProvider(path));
 
             })
             .ConfigureWebHostDefaults(webBuilder =>

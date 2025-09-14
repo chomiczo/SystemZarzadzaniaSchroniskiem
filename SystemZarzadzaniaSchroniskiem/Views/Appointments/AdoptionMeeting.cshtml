@@ -1,0 +1,168 @@
+@using SystemZarzadzaniaSchroniskiem.Controllers
+@model AdoptionMeetingInput
+
+@{
+  ViewData["Title"] = "Spotkanie adopcyjne";
+  var profile = Context.Items["UserProfile"] as UserProfile;
+  var pet = ViewBag.Pet as Pet;
+}
+
+<page-layout title="@ViewData["Title"]">
+  <div class="row">
+    <div class="col">
+      <div class="list-group list-group-horizontal">
+        <div class="list-group-item">
+          @pet.Name
+        </div>
+        <div class="list-group-item">
+          @Html.DisplayFor(_ => pet.Species)
+        </div>
+        <div class="list-group-item">
+          @Html.DisplayFor(_ => pet.Breed.Name)
+        </div>
+        <div class="list-group-item">
+          @Html.DisplayFor(_ => pet.Gender)
+        </div>
+        <div class="list-group-item">
+          @pet.Age.NumberSuffix("rok", "lata", "lat")
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <form action="AdoptionMeeting" method="post" class="container d-flex flex-column gap-2">
+    <div class="row">
+      <div class="col">
+        <div class="input-group">
+          <div class="input-group-text">Koordynator</div>
+          <select class="form-control" name="StaffProfileId" id="staff-select">
+            @foreach (UserProfile staffProfile in ViewBag.Staff)
+            {
+              <option value="@staffProfile.Id"
+                data-timetable-days="@String.Join(',', staffProfile.Timetables?.Select(t => t.Weekday).ToList())">
+                @staffProfile.ProfileName()
+              </option>
+            }
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col">
+        <input type="date" id="date" name="Date" style="display: none;" />
+      </div>
+      <div class="col">
+        <h4>Dostępne godziny</h4>
+        <div id="available-hours" class="d-flex flex-row gap-2 flex-wrap">
+        </div>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col">
+        <button class="btn btn-primary">Zapisz</button>
+      </div>
+    </div>
+
+    @Html.HiddenFor(p => p.PetId)
+  </form>
+
+</page-layout>
+
+@section Styles {
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+  <link rel="stylesheet" type="text/css" href="https://npmcdn.com/flatpickr/dist/themes/material_orange.css">
+}
+
+@section Scripts {
+  <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+  <script src="https://npmcdn.com/flatpickr/dist/l10n/pl.js"></script>
+
+
+  <script>
+    const staffSelect = document.getElementById('staff-select')
+    const availableHours = document.getElementById('available-hours')
+
+    const weekdays = {
+      'Monday': 1,
+      'Tuesday': 2,
+      'Wednesday': 3,
+      'Thursday': 4,
+      'Friday': 5,
+      'Saturday': 6,
+      'Sunday': 0,
+    }
+    let timetableDays = []
+    console.log(staffSelect)
+
+    let picker
+
+    const makePicker = (days) => {
+      return flatpickr('#date', {
+        inline: true,
+        disable: [
+          function (date) {
+            const onWeekend = !timetableDays.includes(date.getDay())
+            const beforeNow = date.getTime() - new Date().getTime() < 0
+
+            return onWeekend || beforeNow
+          },
+        ],
+        locale: 'pl',
+        monthSelectorType: 'static'
+      })
+    }
+
+    picker = makePicker([0, 6])
+
+    const updateTimetable = () => {
+      const selectedOption = staffSelect.querySelector(`option[value="${staffSelect.value}"]`)
+      const days = selectedOption.getAttribute('data-timetable-days')
+      timetableDays = days.split(',').map(x => weekdays[x])
+      picker.redraw()
+    }
+
+    updateTimetable()
+    staffSelect.addEventListener('change', e => {
+      console.log(e)
+      updateTimetable()
+    })
+
+    document.getElementById('date').addEventListener('change', e => {
+      console.log(e.target.value)
+      fetch(`/api/hours/${staffSelect.value}/${e.target.value}`).then(res => {
+        if (res.status === 200) {
+          res.json().then(data => {
+            console.log(data)
+            availableHours.innerHTML = ''
+            for (const hour of data) {
+
+              const hourInput = document.createElement('div')
+              hourInput.classList.add('input-group')
+              hourInput.style.maxWidth = `200px`
+
+              const hourLabel = document.createElement('span')
+              hourLabel.classList.add('input-group-text')
+              hourLabel.innerText = hour.split(':').slice(0, 2).join(':')
+
+              const hourControl = document.createElement('span')
+              hourControl.classList.add('form-control')
+
+              const hourRadio = document.createElement('input')
+              hourRadio.setAttribute('type', 'radio')
+              hourRadio.setAttribute('name', 'Hour')
+              hourRadio.setAttribute('value', hour)
+              hourRadio.classList.add('btn', 'btn-primary')
+
+              hourInput.appendChild(hourLabel)
+              hourInput.appendChild(hourControl)
+              hourControl.appendChild(hourRadio)
+              availableHours.appendChild(hourInput)
+            }
+          })
+        }
+      })
+    })
+  </script>
+}

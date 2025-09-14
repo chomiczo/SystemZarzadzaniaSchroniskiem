@@ -1,0 +1,66 @@
+@using Humanizer
+@model List<Event>
+
+
+<div class="container d-flex flex-column gap-4">
+  <div class="row d-flex flex-row align-items-center">
+    <div class="col">
+      <h1 class="page-title">
+        <icon name="bi-calendar2-week" />
+        Baza Wydarzeń
+      </h1>
+    </div>
+    <div class="col text-end">
+      <a class="btn btn-primary" asp-action="Create" asp-controller="Events">
+        <icon name="fa-plus" />
+        Dodaj wydarzenie
+      </a>
+    </div>
+  </div>
+
+  <div class="row rounded">
+    <table class="table table-responsive table-striped">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Koordynator</th>
+          <th>Nazwa</th>
+          <th>Data</th>
+          <th></th>
+        </tr>
+      </thead>
+
+      <tbody>
+        @foreach (Event evt in Model)
+        {
+          <tr>
+            <td>@evt.Id</td>
+            <td data-bs-toggle="tooltip" data-bs-placement="top"
+              data-bs-title="@evt.CoordinatorProfile.ProfileName("{e}")">
+              @evt.CoordinatorProfile.ProfileName("{f} {l}")
+            </td>
+            <td>
+              @evt.Name
+            </td>
+            <td>
+              @evt.StartDate.CultureDate("dd.MM.yy HH:mm")
+              –
+              @evt.EndDate.CultureDate("dd.MM.yy HH:mm")
+            </td>
+            <td>
+              <a href="@Url.Action("Edit", "Events", new { Id = @evt.Id })" class="btn btn-sm btn-outline-primary">
+                <icon name="fa-pencil" />
+                Edytuj
+              </a>
+              <a href="@Url.Action("Delete", "Events", new { Id = @evt.Id })" class="btn btn-sm btn-outline-danger">
+                <icon name="fa-xmark" />
+                Usuń
+              </a>
+            </td>
+          </tr>
+        }
+      </tbody>
+    </table>
+
+  </div>
+</div>

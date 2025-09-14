@@ -1,0 +1,77 @@
+@model IEnumerable<SystemZarzadzaniaSchroniskiem.Models.Breed>
+
+@{
+  var newBreed = new Breed();
+}
+
+<div class="container d-flex flex-column gap-4">
+  <div class="row">
+    <h1 class="page-title">
+      <icon name="fa-dragon" />
+      Rasy
+    </h1>
+  </div>
+
+  <form asp-action="CreateBreed" method="post">
+    <partial name="_BreedForm" model="@newBreed" />
+  </form>
+
+
+  <div class="row rounded" id="breeds">
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Gatunek</th>
+          <th>Rasa</th>
+          <th>Akcje</th>
+        </tr>
+      </thead>
+      <tbody>
+        @foreach (Breed breed in Model)
+        {
+          <tr>
+            <td>@breed.Id</td>
+            <td>@Html.DisplayFor(_ => breed.Species)</td>
+            <td>@breed.Name</td>
+            <td class="d-flex align-items-center gap-2">
+              <a class="btn btn-sm btn-primary d-flex align-items-center gap-2"
+                href="@Url.Action("EditBreed", "Pets", new { Id = @breed.Id })">
+                <icon name="fa-pencil" />
+                Edytuj
+              </a>
+
+              <form asp-action="DeleteBreed" method="post">
+                <input type="hidden" name="Id" value="@breed.Id" />
+                <input type="hidden" name="Species" value="@breed.Species" />
+                <input type="hidden" name="Name" value="@breed.Name" />
+                <button class="breed-delete-submit btn btn-sm btn-outline-danger d-flex align-items-center gap-2"
+                  href="#">
+                  <icon name="fa-xmark" />
+                  Usuń
+                </button>
+              </form>
+            </td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<style>
+  #breeds {
+    max-height: 600px;
+    overflow: auto;
+  }
+</style>
+
+@section Scripts {
+  <script>
+    document.querySelectorAll('.breed-delete-submit').forEach(el => el.addEventListener('click', e => {
+      if (!confirm(`Jesteś pewien, że chcesz usunąć rasę?`)) {
+        e.preventDefault()
+      }
+    }))
+  </script>
+}

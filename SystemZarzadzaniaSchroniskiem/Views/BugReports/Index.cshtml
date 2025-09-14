@@ -1,44 +1,18 @@
-﻿@section Styles {
-	<link rel="stylesheet" href="~/css/BugReport.css" />
+﻿@model List<BugReport>
+
+@{
+	ViewData["Title"] = User.IsInRole("Administrator") ? "Zgłoszenia błędów" : "Twoje zgłoszenia";
 }
 
-<div class="bugreport-container">
-	@if (User.IsInRole("Administrator"))
-	{
-		<h1>Zgłoszenia użytkowników</h1>
-	} else
-	{
-		<h1>Twoje Zgłoszenia</h1>
-	}
-	<table>
-		<thead>
-			<tr>
-				<td>Id</td>
-				@if (ViewBag.IsAdmin)
+<page-layout title="@ViewData["Title"]" title-icon="fa-bug">
+	<div class="row">
+		<div class="col">
+			<ul class="list-group">
+				@foreach (var Report in Model)
 				{
-					<td>Zgłaszający</td>
+					<partial name="_BugReportListItem" model="@Report" />
 				}
-				<td>Data zgłoszenia</td>
-				<td>Status</td>
-				<td>Opis</td>
-				<td></td>
-			</tr>
-		</thead>
-		<tbody>
-			@foreach (BugReport report in ViewBag.Reports)
-			{
-				<tr>
-					<td>@report.Id</td>
-					@if (ViewBag.IsAdmin)
-					{
-						<td>@report.User.Email</td>
-					}
-					<td>@report.DateCreated</td>
-					<td><partial name="_BugStatus"  model=@report /></td>
-					<td>@String.Join("", report.Description.Take(100))</td>
-					<td>@Html.ActionLink("Zobacz", "Details", new { Id = report.Id }, null)</td>
-				</tr>
-			}
-		</tbody>
-	</table>
-</div>
+			</ul>
+		</div>
+	</div>
+</page-layout>

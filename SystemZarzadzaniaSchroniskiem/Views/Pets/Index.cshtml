@@ -1,62 +1,165 @@
-﻿<div class="d-flex flex-column gap-5">
-	<h1>
-		<i class="bi bi-database position-relative">
-			<i class="fas fa-cat position-absolute" style="top: 0; right: 20px; font-size: 1rem; background-color: var(--sc-beige);"> </i>
-		</i>
+﻿@using Humanizer
+@using Microsoft.AspNetCore.Identity
+@model List<Pet>
+@inject UserManager<IdentityUser> UserManager
 
-		Baza Zwierząt
-	</h1>
+<div class="container">
+	<div class="row">
+		<h1 class="page-title">
+			<i class="fas fa-paw position-relative"></i>
 
-	<div>
-	<ul class="nav nav-tabs" role="tablist">
-		<li class="nav-item" role="presentation">
-			<button
-				class="nav-link active"
-				id="pets-tab"
-				data-bs-toggle="tab"
-				data-bs-target="#pets-tab-pane"
-				type="button"
-				role="tab"
-				aria-controls="pets-tab-pane"
-				aria-selected="true">
-				Zwierzęta
-			</button>
-		</li>
+			Zwierzaki
+		</h1>
+	</div>
 
-		<li class="nav-item" role="presentation">
-			<button
-				class="nav-link"
-				id="breeds-tab"
-				data-bs-toggle="tab"
-				data-bs-target="#breeds-tab-pane"
-				type="button"
-				role="tab"
-				aria-controls="breeds-tab-pane"
-				aria-selected="false">
-				Rasy
-			</button>
-		</li>
-	</ul>
-
-	<div class="container p-4 rounded-bottom" id="pets-content">
-		<div class="tab-content">
-			<div class="tab-pane fade show active" id="pets-tab-pane" role="tabpanel" aria-labelledby="pets-tab" tabindex="0">
-				<partial name="_Pets" />
+	<div class="filters row p-4">
+		<div class="col-md-4">
+			<div class="btn-group">
+				<button class="btn btn-outline-primary" data-bs-toggle="tooltip" data-bs-placement="top"
+					data-bs-title="Dowolna płeć" onclick="onFilterChange('gender', null);" data-filter="gender"
+					data-filter-value="null">
+					<icon name="fa-venus-mars" />
+				</button>
+				<button class="btn btn-outline-primary" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Samiec"
+					onclick="onFilterChange('gender', 'male');" data-filter="gender" data-filter-value="male">
+					<icon name="fa-mars" />
+				</button>
+				<button class="btn btn-outline-primary" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Samica"
+					data-filter="gender" data-filter-value="female" onclick="onFilterChange('gender', 'female');">
+					<icon name="fa-venus" />
+				</button>
 			</div>
+		</div>
 
-			<div class="tab-pane fade" id="breeds-tab-pane" role="tabpanel" aria-labelledby="breeds-tab" tabindex="0">
-				Breeds
+		<div class="col-md-4">
+			<div class="btn-group">
+				<button class="btn btn-outline-primary" data-bs-toggle="tooltip" data-bs-placement="top"
+					data-bs-title="Psy i koty" onclick="onFilterChange('species', null);" data-filter="species"
+					data-filter-value="null">
+					<icon name="fa-paw" />
+				</button>
+				<button class="btn btn-outline-primary " data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Koty"
+					onclick="onFilterChange('species', 'cat');" data-filter="species" data-filter-value="cat">
+					<icon name="fa-cat" />
+				</button>
+				<button class="btn btn-outline-primary" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Psy"
+					onclick="onFilterChange('species', 'dog');" data-filter="species" data-filter-value="dog">
+					<icon name="fa-dog" />
+				</button>
+			</div>
+		</div>
+
+		<div class="col-md-4">
+			<div class="input-group">
+				<span class="input-group-text">
+					Status
+				</span>
+				<select class="form-control" id="status-filter">
+					<option value="null">Wszystkie</option>
+					<option value="@AdoptionStatus.Admitted">Przyjęte do schroniska</option>
+					<option value="@AdoptionStatus.AdoptionCompleted">Adoptowane</option>
+					<option value="@AdoptionStatus.AvailableForAdoption">Oczekujące na adopcję</option>
+					<option value="@AdoptionStatus.Deceased">Zmarłe</option>
+					<option value="@AdoptionStatus.InTemporaryHome">W domu tymczasowym</option>
+				</select>
 			</div>
 		</div>
 	</div>
+
+	<div class="row">
+		<div class="cards d-flex gap-4 flex-wrap justify-content-center">
+			@foreach (Pet pet in Model)
+			{
+				<div class="card pet-card shadow">
+					<div class="card-header d-flex justify-content-between align-items-center">
+						<h4 class="m-0">
+							@pet.Name
+						</h4>
+						<div class="pet-status-badge pet-status-@pet.AdoptionStatus">
+							@Html.DisplayFor(_ => pet.AdoptionStatus)
+						</div>
+					</div>
+					<div class="list-group list-group-flush">
+						<div class="list-group-item d-flex align-items-center justify-content-between">
+							<div>
+								@pet.Breed.Name,
+								@pet.Age.NumberSuffix("rok", "lata", "lat")
+							</div>
+							@Html.DisplayFor(_ => pet.Gender)
+						</div>
+
+					</div>
+					<img src="@Url.Content($"~/uploads/{pet.ImagePath}")" class="card-img-top m-auto">
+					<div class="card-body">
+						@pet.Description.Truncate(200)
+					</div>
+					<div class="card-footer">
+						@if (pet.AdoptionStatus == AdoptionStatus.AvailableForAdoption)
+						{
+							<a class="btn btn-primary" href="@Url.Action("Adopt", "Pets", new { Id = pet.Id })">Adoptuj</a>
+						}
+					</div>
+				</div>
+			}
+		</div>
 	</div>
 </div>
 
-@section Styles {
-    <style>
-        #pets-content {
-            background-color: var(--sc-white-30);
-        }
-    </style>
-}
+<style>
+	.pet-card {
+		max-width: 400px;
+	}
 
+	.card-img-top {
+		max-width: 200px;
+	}
+
+	.pet-status-badge {
+		width: max-content;
+		padding: 2px 8px;
+		border-radius: 4px;
+	}
+
+	.filters {
+		background-color: var(--sc-white-20);
+		margin: 10px 0;
+		border-radius: 4px;
+	}
+</style>
+
+@section Scripts {
+	<script>
+		const searchParams = new URL(window.location).searchParams
+		const genderFilter = searchParams.get('gender') ?? 'null'
+		const speciesFilter = searchParams.get('species') ?? 'null'
+		const statusFilter = searchParams.get('status') ?? 'null'
+
+		console.log({ genderFilter })
+
+		document.querySelectorAll(`button[data-filter="gender"]`).forEach((btn) => {
+			if (btn.getAttribute('data-filter-value') === genderFilter) {
+				btn.classList.add('active')
+			}
+		})
+
+		document.querySelectorAll(`button[data-filter="species"]`).forEach((btn) => {
+			if (btn.getAttribute('data-filter-value') === speciesFilter) {
+				btn.classList.add('active')
+			}
+		})
+
+		const statusSelect = document.getElementById('status-filter')
+		statusSelect.value = statusFilter
+
+		statusSelect.addEventListener('change', e => onFilterChange('status', e.target.value))
+
+
+		const onFilterChange = (name, value) => {
+			const currentLocation = new URL(window.location)
+
+			currentLocation.searchParams.set(name, value)
+			console.log({ name, value, currentLocation })
+			window.location.replace(currentLocation)
+		}
+	</script>
+}

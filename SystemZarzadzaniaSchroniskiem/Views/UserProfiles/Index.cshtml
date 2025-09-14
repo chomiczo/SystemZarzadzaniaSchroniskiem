@@ -1,0 +1,158 @@
+@using Microsoft.AspNetCore.Identity
+@using SystemZarzadzaniaSchroniskiem.Helpers
+@using SystemZarzadzaniaSchroniskiem.Controllers
+
+@{
+    ViewData["Title"] = "Baza użytkowników";
+}
+
+<page-layout title="@ViewData["Title"]" title-icon="fa-user">
+    <div class="row rounded">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Imię i nazwisko</th>
+                    <th>Email</th>
+                    <th>Role</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (ProfileWithRoles profileWithRoles in ViewBag.Profiles)
+                {
+                    var profile = profileWithRoles.Profile as UserProfile;
+                    var roles = profileWithRoles.Roles as List<string>;
+                    if (roles == null)
+                    {
+                        roles = new List<string>();
+                    }
+
+                    <tr>
+                        <td>@profile.Id</td>
+                        <td>
+                            @profile.FirstName
+                            @profile.LastName
+                        </td>
+                        <td>
+                            <div class="d-flex gap-2 align-items-center">
+                                @if (profile.IsLocked)
+                                {
+                                    <i class="fas fa-lock text-danger" data-bs-toggle="tooltip" data-bs-title="Konto zablokowane"></i>
+                                }
+
+                                @if (profile.User.EmailConfirmed)
+                                {
+                                    <i class="fas fa-circle-check text-success" data-bs-toggle="tooltip"
+                                       data-bs-title="Adres potwierdzony"></i>
+                                }
+                                else
+                                {
+                                    <i class="fas fa-circle-xmark text-danger" data-bs-toggle="tooltip"
+                                       data-bs-title="Adres niepotwierdzony"></i>
+                                }
+                                @profile.User.Email
+                            </div>
+                        </td>
+                        <td class="fs-4">
+
+                            <div class="btn-group">
+
+                                @foreach (var role in new string[] {"Administrator", "Veterinarian", "Employee", "Volunteer",
+                            "Adopter"})
+                                {
+                                    @profileWithRoles.ToggleButtonForRole(role)
+                                }
+                            </div>
+
+                        </td>
+                        <td>
+                            <div class="dropdown text-end">
+                                <a class="btn btn-sm btn-primary dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
+                                   aria-expanded="false">
+                                    Akcje
+                                </a>
+
+                                <ul class="dropdown-menu">
+                                    <li>
+                                        <a class="dropdown-item d-flex align-items-center gap-2"
+                                           href="@Url.Action("Edit", "UserProfiles", new { Id = @profile.Id })">
+                                            <i class="fas fa-user-pen text-primary"></i>
+                                            Edytuj
+                                        </a>
+                                    </li>
+
+                                    @if (!profile.User.EmailConfirmed)
+                                    {
+                                        <li>
+                                            <form asp-action="ConfirmEmail" method="post">
+                                                <input type="hidden" name="Id" value="@profile.Id" />
+
+                                                <button class="dropdown-item d-flex align-items-center gap-2">
+                                                    <i class="fas fa-at text-success"></i>
+
+                                                    Potwierdź Email
+                                                </button>
+                                            </form>
+                                        </li>
+                                    }
+
+                                    @if (profile.IsLocked)
+                                    {
+                                        <li>
+                                            <form asp-action="Unlock" method="post">
+                                                <input type="hidden" name="Id" value="@profile.Id" />
+
+                                                <button class="dropdown-item d-flex align-items-center gap-2">
+                                                    <i class="fas fa-lock-open text-success"></i>
+
+                                                    Odblokuj
+                                                </button>
+                                            </form>
+                                        </li>
+                                    }
+
+                                    @if (profileWithRoles.Roles.Contains("Employee") || profileWithRoles.Roles.Contains("Volunteer") ||
+                                   profileWithRoles.Roles.Contains("Veterinarian") || profileWithRoles.Roles.Contains("Administrator"))
+                                    {
+                                        <li>
+                                            <a class="dropdown-item d-flex align-items-center gap-2"
+                                               href="@Url.Action("Timetable", "Appointments", new { ProfileId = @profile.Id })">
+                                                <i class="fas fa-business-time text-primary"></i>
+
+                                                Grafik
+                                            </a>
+                                        </li>
+                                    }
+
+                                    <li>
+                                        <a class="dropdown-item d-flex align-items-center gap-2"
+                                           href="@Url.Action("Delete", "UserProfiles", new { id = @profile.Id })">
+                                            <i class="fas fa-user-slash text-danger"></i>
+                                            Usuń
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</page-layout>
+
+@section Scripts {
+    <script>
+        function toggleRole(profileId, role) {
+          console.log({ profileId, role })
+          fetch(`/UserProfiles/ToggleRole/${profileId}/${role}/`, {
+            method: 'POST'
+          }).then((res) => {
+            if (res.status === 200) {
+              window.location.href = '/UserProfiles/Index'
+            }
+          })
+        }
+    </script>
+}

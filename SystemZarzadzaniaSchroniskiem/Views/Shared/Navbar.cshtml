@@ -1,0 +1,145 @@
+﻿@using Microsoft.AspNetCore.Identity
+
+@inject SignInManager<IdentityUser> SignInManager
+@inject UserManager<IdentityUser> UserManager
+
+
+@{
+	bool isAdmin = User.IsInRole("Administrator");
+	bool isEmployee = User.IsInRole("Employee");
+	bool isVet = User.IsInRole("Veterinarian");
+	bool isVolunteer = User.IsInRole("Volunteer");
+	bool hasMenuAccess = isAdmin || isEmployee || isVet || isVolunteer;
+}
+
+
+<style>
+	#navbar .nav-link {
+		color: var(--sc-lightblue);
+		text-decoration: none;
+		display: flex;
+		align-items: center;
+		gap: 6px;
+	}
+
+	#navbar .dropdown-menu {
+		background-color: var(--sc-orange-50);
+		backdrop-filter: blur(5px);
+	}
+
+	#navbar .dropdown-item {
+		display: flex;
+		gap: 10px;
+		align-items: center;
+	}
+
+	#navbar .dropdown-item:hover {
+		background-color: var(--sc-beige-80);
+	}
+</style>
+
+<nav class="navbar navbar-expand-md navbar-toggleable-md" id="navbar">
+	<div class="container-fluid">
+		<a id="navbar-brand" asp-controller="Home" asp-action="Index"
+			style="color: var(--sc-beige); text-decoration: none; margin-right: 20px;">
+			<div class="d-flex align-items-center gap-2">
+				<i class="fas fa-shield-dog"></i> Schronisko
+			</div>
+		</a>
+
+
+		<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse"
+			aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+			<span class="navbar-toggler-icon"></span>
+		</button>
+
+		<div class="navbar-collapse collapse d-md-inline-flex justify-content-between">
+			<ul class="navbar-nav flex-grow-1 gap-4">
+
+				<li class="nav-item">
+					<a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index">
+						<i class="bi bi-house-door"></i>
+						Home
+					</a>
+				</li>
+
+				<li class="nav-item">
+					<a class="nav-link" asp-controller="Pets" asp-action="Index">
+						<i class="fas fa-paw"></i>
+
+						Zwierzaki
+					</a>
+				</li>
+
+				<li class="nav-item">
+					<a class="nav-link" asp-controller="Events" asp-action="Index">
+						<i class="bi bi-calendar2-week"></i>
+						Wydarzenia
+					</a>
+				</li>
+
+
+				@if (hasMenuAccess)
+				{
+					<li class="nav-item dropdown">
+
+						<a class="nav-link dropdown-toggle" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+							<i class="bi bi-shield"></i>
+							Administracja
+						</a>
+
+						<ul class="dropdown-menu">
+							@if (isAdmin || isEmployee || isVolunteer || isVet)
+							{
+								<a asp-controller="Pets" asp-action="Database" class="dropdown-item">
+									@* <i class="fas fa-paw"></i> *@
+									<icon name="fa-paw" />
+									Zwierzęta
+								</a>
+							}
+
+							@if (isAdmin)
+							{
+								<a asp-controller="Pets" asp-action="Breeds" class="dropdown-item">
+									<i class="fas fa-dragon"></i>
+									Rasy
+								</a>
+
+								<a asp-controller="UserProfiles" asp-action="Index" class="dropdown-item">
+									<i class="fas fa-user"></i>
+									Użytkownicy
+								</a>
+							}
+
+							@if (isAdmin || isEmployee || isVolunteer)
+							{
+								<a asp-controller="Events" asp-action="Database" class="dropdown-item">
+									<i class="bi bi-calendar2-week"></i>
+									Wydarzenia
+								</a>
+							}
+
+							@if (isAdmin)
+							{
+								<a asp-controller="Appointments" asp-action="Database" class="dropdown-item">
+									<i class="fas fa-calendar-check"></i>
+									Wizyty
+								</a>
+							}
+
+							@if (isAdmin)
+							{
+								<li class="dropdown-divider"></li>
+
+								<a asp-area="" asp-controller="BugReports" asp-action="Index" class="dropdown-item">
+									<i class="bi bi-bug"></i> Zgłoszenia Błędów
+								</a>
+							}
+						</ul>
+					</li>
+				}
+			</ul>
+			<partial name="_LoginPartial" />
+		</div>
+	</div>
+</nav>

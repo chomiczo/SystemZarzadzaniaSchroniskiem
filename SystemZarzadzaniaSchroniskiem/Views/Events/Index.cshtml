@@ -1,0 +1,81 @@
+@model List<Event>
+@{
+  UserProfile? profile = Context.Items["UserProfile"] as UserProfile;
+}
+
+<div class="container d-flex flex-column gap-4">
+  <div class="row">
+    <h1 class="page-title">
+      <icon name="bi-calendar2-week"/>
+      Wydarzenia
+    </h1>
+  </div>
+
+  @foreach (Event evt in Model)
+  {
+    <div class="row">
+      <div class="col-12">
+        <div class="card event-card">
+          <h5 class="card-header d-flex flex-row align-items-center justify-content-between text-bg-primary">
+            @evt.Name
+            @if (profile != null) {
+
+             if (evt.Attendees.SingleOrDefault(e => e.AttendeeProfileId == profile.Id) == null) {
+
+              <a class="btn btn-secondary btn-sm" href="@Url.Action("Attend", "Events", new { Id = @evt.Id })">
+                Weź udział
+              </a>
+              } else {
+
+              <a class="btn btn-success btn-sm text-light d-flex align-items-center gap-2" href="@Url.Action("Attend", "Events", new { Id = @evt.Id })">
+                <icon name="fa-check"/>
+                Bierzesz udział
+              </a>
+
+              }
+            }
+          </h5>
+          <div class="list-group list-group-flush">
+            <div class="list-group-item d-flex align-items-center justify-content-between gap-4 small">
+               <div>
+                 Start:
+                 @evt.StartDate.CultureDate("dd MMMM yyyy r., HH:mm")
+              </div>
+              <div>
+                Koniec:
+                @evt.EndDate.CultureDate("dd MMMM yyyy r., HH:mm")
+              </div>
+            </div>
+            <div class="list-group-item d-flex align-items-center justify-content-between gap-4 small">
+              @evt.Location
+            </div>
+          </div>
+          <div class="card-body">
+            <div class="container">
+              <div class="row">
+                <div class="col-md-6">
+                  @evt.Description
+                </div>
+                <div class="col-md-6">
+                  <div class="list-group">
+
+                    <div class="list-group-item">
+                      Koordynator: @evt.CoordinatorProfile.ProfileName()
+                    </div>
+
+                    <div class="list-group-item">
+                      @evt.Attendees.Count().NumberSuffix("zapisany uczestnik", "zapisanych uczestników", "zapisanych uczestników")
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  }
+</div>
+
+<style>
+</style>

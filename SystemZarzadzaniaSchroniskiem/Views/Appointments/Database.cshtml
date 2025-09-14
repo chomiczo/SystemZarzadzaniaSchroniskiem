@@ -1,0 +1,66 @@
+@model List<Appointment>
+
+@{
+  ViewData["Title"] = "Spotkania";
+}
+
+<page-layout title="@ViewData["Title"]">
+
+  <div class="row">
+    <div class="col">
+      <table class="table table-striped">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Typ</th>
+            <th>Data</th>
+            <th>Użytkownik</th>
+            <th>Koordynator</th>
+            <th>Zwierzę</th>
+            <th></th>
+          </tr>
+        </thead>
+
+        <tbody>
+          @foreach (var appointment in Model)
+          {
+            <tr>
+              <td>
+                @appointment.Id
+              </td>
+              <td>
+                @appointment.Name
+              </td>
+              <td>
+                @appointment.AppointmentDate.CultureDateTime()
+              </td>
+              <td>
+                @appointment.UserProfile.ProfileName()
+              </td>
+              <td>
+                @appointment.StaffUserProfile.ProfileName()
+              </td>
+              <td>
+                @if (appointment.Pet != null)
+                {
+                  @Html.DisplayFor(_ => @appointment.Pet.Species)
+                  <span>&nbsp;</span>
+                  @appointment.Pet.Name
+                }
+              </td>
+              <td>
+                <form asp-action="DeleteConfirmation" asp-controller="Appointments" method="get">
+                  <input type="hidden" name="Id" value="@appointment.Id">
+                  <button class="btn btn-sm btn-outline-danger">
+                    <icon name="fa-trash"></icon>
+                    Usuń
+                  </button>
+                </form>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  </div>
+</page-layout>

@@ -6,6 +6,8 @@
         public int PetId { get; set; }
         public Pet Pet { get; set; } = null!;
         public DateTime CreationDate { get; set; }
+        public UserProfile UserProfile { get; set; } = null!;
+        public int UserProfileId { get; set; }
         public string Content { get; set; } = null!;
     }
 }

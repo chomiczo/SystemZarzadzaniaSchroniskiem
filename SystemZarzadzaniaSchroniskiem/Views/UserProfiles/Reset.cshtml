@@ -1,0 +1,72 @@
+<div class="container">
+  <div class="row">
+    <div class="col">
+      <h1 class="page-title">
+
+      </h1>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col">
+      <form method="post" id="reset-form">
+        <input type="hidden" name="Action" id="action-input" />
+        <input type="submit" id="form-submit" style="display: none;" />
+
+        <div class="container d-flex flex-column gap-4">
+          <div class="row">
+            <div class="col">
+              <div class="input-group">
+                <span class="input-group-text">
+                  E-Mail
+                </span>
+
+                <input class="form-control" type="email" name="Email">
+              </div>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col text-end">
+              <button class="btn btn-primary" id="activation-btn">
+                <i class="fas fa-envelope"></i>
+
+                Wyślij link aktywacyjny
+              </button>
+            </div>
+
+            <div class="col text-start">
+              <button class="btn btn-secondary" id="password-btn">
+                <i class="fas fa-key"></i>
+
+                Zresetuj hasło
+              </button>
+            </div>
+          </div>
+        </div>
+
+      </form>
+    </div>
+
+  </div>
+</div>
+
+@section Scripts {
+  <script>
+    const actionInput = document.getElementById('action-input')
+    const form = document.getElementById('reset-form')
+    const submitBtn = document.getElementById('form-submit')
+
+    document.getElementById('activation-btn').addEventListener('click', e => {
+      e.preventDefault()
+      actionInput.setAttribute('value', 'activate')
+      submitBtn.click()
+    })
+
+    document.getElementById('password-btn').addEventListener('click', e => {
+      e.preventDefault()
+      actionInput.setAttribute('value', 'reset-password')
+      submitBtn.click()
+    })
+  </script>
+}

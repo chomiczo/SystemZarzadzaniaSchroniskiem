@@ -67,23 +67,25 @@ namespace SystemZarzadzaniaSchroniskiem.Areas.Identity.Pages.Account
             ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
             ///     directly from your code. This API may change or be removed in future releases.
             /// </summary>
-            [Required]
+            [Required(ErrorMessage = "Adres e-mail jest wymagany")]
             [EmailAddress]
+            [Display(Name = "Email")]
             public string Email { get; set; }
 
             /// <summary>
             ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
             ///     directly from your code. This API may change or be removed in future releases.
             /// </summary>
-            [Required]
+            [Required(ErrorMessage = "Hasło jest wymagane")]
             [DataType(DataType.Password)]
+            [Display(Name = "Hasło")]
             public string Password { get; set; }
 
             /// <summary>
             ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
             ///     directly from your code. This API may change or be removed in future releases.
             /// </summary>
-            [Display(Name = "Remember me?")]
+            [Display(Name = "Zapamiętaj mnie")]
             public bool RememberMe { get; set; }
         }
 
@@ -113,6 +115,11 @@ namespace SystemZarzadzaniaSchroniskiem.Areas.Identity.Pages.Account
             if (ModelState.IsValid)
             {
                 var user = await _userManager.FindByEmailAsync(Input.Email);
+                if (user == null)
+                {
+                    return Page();
+                }
+
                 if (user != null)
                 {
                     // Sprawdzamy liczbę nieudanych prób logowania
@@ -121,7 +128,9 @@ namespace SystemZarzadzaniaSchroniskiem.Areas.Identity.Pages.Account
                     // Jeśli konto jest zablokowane, wyświetlamy komunikat
                     if (failedAttempts >= 3 && !await _userManager.IsLockedOutAsync(user))
                     {
-                        ModelState.AddModelError(string.Empty, "Twoje konto zostało zablokowane po 3 nieudanych próbach logowania. Proszę zresetować hasło.");
+                        ModelState.AddModelError(
+                            string.Empty,
+                            "Twoje konto zostało zablokowane po 3 nieudanych próbach logowania. Prosimy zresetować hasło.");
                         return Page(); // Zwróć stronę, jeśli konto jest zablokowane
                     }
                 }
@@ -141,13 +150,25 @@ namespace SystemZarzadzaniaSchroniskiem.Areas.Identity.Pages.Account
                 if (result.IsLockedOut)
                 {
                     _logger.LogWarning("User account locked out.");
-                    ModelState.AddModelError(string.Empty, "Twoje konto zostało zablokowane. Prosimy zresetować hasło w celu odblokowania konta.");
+                    ModelState.AddModelError(
+                        string.Empty,
+                        "Twoje konto zostało zablokowane. Prosimy zresetować hasło w celu odblokowania konta."
+                    );
                     return Page();  // Wyświetlamy komunikat tylko raz
+                }
+                if (result.IsNotAllowed)
+                {
+                    ModelState.AddModelError(
+                        string.Empty,
+                        $"Twoje konto istnieje, ale nie jest aktywowane. Potwierdź rejestrację klikając link w wiadomości, którą wysłaliśmy na adres użyty przy rejestracji.");
                 }
                 else
                 {
                     // Jeśli nie udało się zalogować, informujemy o błędnym haśle
-                    ModelState.AddModelError(string.Empty, "Wpisałeś złe hasło lub E-Mail. Pozostały Ci jeszcze 2 próby na poprawne zalogowanie się. W innym wypadku konto zostanie zablokowane.");
+                    var failedAttempts = await _userManager.GetAccessFailedCountAsync(user);
+                    ModelState.AddModelError(
+                        string.Empty,
+                        $"Wpisałeś złe hasło lub E-Mail. Pozostały Ci jeszcze {failedAttempts} próby na poprawne zalogowanie się. W innym wypadku konto zostanie zablokowane.");
                     return Page();
                 }
             }

@@ -1,83 +1,96 @@
-﻿@model SystemZarzadzaniaSchroniskiem.Models.Pet
+﻿@model Pet
 
 @{
-    Layout = null;
+    ViewData["Title"] = "Edycja zwierzęcia";
 }
 
-<!DOCTYPE html>
+<page-layout title="@ViewData["Title"]" title-icon="fa-circle-plus">
+    <form asp-controller="Pets" asp-action="Edit" method="post" enctype="multipart/form-data">
+        <div class="row mt-4 d-flex gap-2">
+            <div class="row">
+                <div class="col-lg-2">
+                    @Html.FormInputFor(p => p.Name)
+                </div>
 
-<html>
-<head>
-    <meta name="viewport" content="width=device-width" />
-    <title>Edit</title>
-</head>
-<body>
+                <div class="col-lg-2">
+                    @Html.FormInputFor(p => p.Weight)
+                </div>
 
-<h4>Pet</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Edit">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="Id" />
-            <div class="form-group">
-                <label asp-for="Name" class="control-label"></label>
-                <input asp-for="Name" class="form-control" />
-                <span asp-validation-for="Name" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Description" class="control-label"></label>
-                <input asp-for="Description" class="form-control" />
-                <span asp-validation-for="Description" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="AdmissionDate" class="control-label"></label>
-                <input asp-for="AdmissionDate" class="form-control" />
-                <span asp-validation-for="AdmissionDate" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="AdoptionStatus" class="control-label"></label>
-                <select asp-for="AdoptionStatus" class="form-control"></select>
-                <span asp-validation-for="AdoptionStatus" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="BirthDate" class="control-label"></label>
-                <input asp-for="BirthDate" class="form-control" />
-                <span asp-validation-for="BirthDate" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Weight" class="control-label"></label>
-                <input asp-for="Weight" class="form-control" />
-                <span asp-validation-for="Weight" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Species" class="control-label"></label>
-                <select asp-for="Species" class="form-control"></select>
-                <span asp-validation-for="Species" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Gender" class="control-label"></label>
-                <select asp-for="Gender" class="form-control"></select>
-                <span asp-validation-for="Gender" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="BreedId" class="control-label"></label>
-                <select asp-for="BreedId" class="form-control" asp-items="ViewBag.BreedId"></select>
-                <span asp-validation-for="BreedId" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
-            </div>
-        </form>
-    </div>
-</div>
+                <div class="col-lg-2">
+                    @Html.FormSelectFor(p => p.Gender)
+                </div>
 
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
+                <div class="col-lg-2">
+                    @Html.FormSelectFor(p => p.Species, "species-input")
+                </div>
+
+                <div class="col-lg-4">
+                    <div class="input-group">
+                        <span class="input-group-text">Rasa</span>
+                        <input class="form-control @Html.InvalidClassNameFor(p => p.BreedId)" id="breed-query"
+                            type="text" autocomplete="off" name="BreedName" value="@Model.Breed.Name">
+                        <input type="hidden" asp-for="BreedId" id="breed-input" value="@Model.BreedId">
+                    </div>
+                    <div class="dropdown">
+                        <ul class="dropdown-menu" id="breed-dropdown"></ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-lg-4">
+                    @Html.FormSelectFor(p => p.AdoptionStatus)
+                </div>
+
+                <div class="col-lg-4">
+                    <div class="input-group">
+                        <span class="input-group-text">
+                            @Html.DisplayNameFor(p => p.AdmissionDate)
+                        </span>
+                        <input type="date" class="form-control" 
+                               value="@Model.AdmissionDate.ToString("yyyy-MM-dd")" name="AdmissionDate">
+                    </div>
+                </div>
+
+                <div class="col-lg-4">
+                    <div class="input-group">
+                        <span class="input-group-text">
+                            @Html.DisplayNameFor(p => p.BirthDate)
+                        </span>
+                        <input type="date" class="form-control"
+                               value="@Model.BirthDate.ToString("yyyy-MM-dd")" name="Birth Date">
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-12">
+                    <textarea class="form-control" placeholder="Opis zwierzęcia"
+                        name="Description">@Model.Description</textarea>
+                </div>
+            </div>
+
+            <div class="row">
+                @Html.HiddenFor(p => p.ImagePath)
+                <div class="col-lg-8 d-flex justify-content-end">
+                    <div class="input-group">
+                        <input class="form-control" type="file" asp-for="FileUpload">
+                    </div>
+                </div>
+                <div class="col-lg-4 d-flex justify-content-end">
+                    <button class="btn btn-primary d-flex justify-content-between align-items-center gap-2">
+                        <i class="fas fa-check"></i>
+                        Zapisz zmiany
+                    </button>
+                </div>
+            </div>
+        </div>
+        @Html.HiddenFor(p => p.OwnerProfileId)
+    </form>
+</page-layout>
+
+<link rel="stylesheet" type="text/css" href="@Url.Content("~/css/PetsForm.css")">
 
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script src="@Url.Content("~/js/PetsForm.js")"></script>
 }
-</body>
-</html>

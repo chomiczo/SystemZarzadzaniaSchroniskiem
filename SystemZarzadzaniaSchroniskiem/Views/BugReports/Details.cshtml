@@ -1,107 +1,111 @@
-﻿@model SystemZarzadzaniaSchroniskiem.Models.BugReport
+﻿@model BugReport
 
-@section Styles {
-	<link rel="stylesheet" href="~/css/BugReport.css" />
-}
+<page-layout title="Zgłoszenie #@Model.Id" title-icon="fa-bug">
+	<div class="row">
+		<div class="col">
+			<div class="card bugreport">
+				<div class="card-header list-group list-group-horizontal">
+					<div class="list-group-item flex-grow-1">
+						@Model.Profile.ProfileName()
+					</div>
+					<div class="list-group-item">
+						@Model.DateCreated.CultureDateTime()
+					</div>
+					<div class="list-group-item">
+						<form asp-action="ChangeStatus" asp-controller="BugReports" method="post">
+							<input type="hidden" value="@Model.Id" name="BugReportId">
+							<input type="submit" id="status-submit" style="display: none;">
+							@Html.FormSelectFor(p => p.Status, "status-select")
+						</form>
+					</div>
+				</div>
 
-<div class="bugreport-container">
-	<div class="bugreport">
-		<div-- class="bugreport-title">
-			<h1>
-				Zgłoszenie nr @Html.DisplayFor(model => model.Id)
-			</h1>
-			<partial name="_BugStatus" />
-		</div>
-
-		@if (User.IsInRole("Administrator"))
-		{
-			<div style="display: flex; flex-direction: row; gap: 20px;">
-				Oznacz jako:
-				<div class="bugreport-controls">
-					<button class="update-status-btn" data-id="@Html.DisplayFor(model => model.Id)" data-status="Open">Otwarte</button>
-					<button class="update-status-btn" data-id="@Html.DisplayFor(model => model.Id)" data-status="InProgress">W toku</button>
-					<button class="update-status-btn" data-id="@Html.DisplayFor(model => model.Id)" data-status="Closed">Zamknięte</button>
-					<button class="update-status-btn" data-id="@Html.DisplayFor(model => model.Id)" data-status="Resolved">Rozwiązane</button>
+				<div class="card-body">
+					@Html.DisplayFor(p => p.Description)
 				</div>
 			</div>
-		}
-
-		<div class="bugreport-info">
-			<div>
-				Zgłosił: @Html.DisplayFor(model => model.User.Email)
-			</div>
-			<div>
-				Data zgłoszenia: @Html.DisplayFor(model => model.DateCreated)
-			</div>
 		</div>
+	</div>
 
-		<div>
-			<h4>Opis</h4>
-
-			<p class="bugreport-description">
-				@Html.DisplayFor(model=>model.Description)
-			</p>
+	<div class="row">
+		<div class="col">
+			<h4>
+				<icon name="fa-comment" />
+				Dyskusja
+			</h4>
 		</div>
+	</div>
 
-		<div>
-			<h4>Dyskusja</h4>
+	<div class="row">
+		<div class="col d-flex flex-column gap-2">
+			@foreach (var comment in Model.Comments)
+			{
+				<partial name="_BugReportComment" model="@comment" />
+			}
+		</div>
+	</div>
 
-			<div class="bugreport-comments">
-				@foreach (BugReportComment comment in ViewBag.Comments)
-				{
-					<div class="bugreport-comment">
-						<div class="bugreport-comment-info">
-							<div>
-								@comment.User.Email
-							</div>
-							<div class="bugreport-comment-date">
-								@comment.DateCreated
+	<div class="row">
+		<div class="col">
+			@if (Model.Commentable)
+			{
+
+				<form class="container d-flex flex-column gap-2" asp-action="CreateComment" asp-controller="BugReports"
+					method="post">
+					<input type="hidden" name="BugReportId" value="@Model.Id">
+					<div class="row">
+						<div class="col">
+							<div class="form-floating">
+								<textarea id="comment-input" class="form-control" placeholder="Komentarz" name="Content"></textarea>
+								<label for="comment-input">Komentarz</label>
 							</div>
 						</div>
-						<p class="bugreport-comment-content">
-							@comment.Content
-						</p>
 					</div>
-				}
-			</div>
-
-			@if (Model.Status == BugReportStatus.Open || Model.Status == BugReportStatus.InProgress)
-			{
-				<form asp-action="CreateComment" method="post">
-					<input type="hidden" name="BugReportId" value="@Html.DisplayFor(model => model.Id)" />
-					<textarea name="Content" placeholder="Dodaj komentarz"></textarea>
-					<input type="submit" value="Wyślij" />
+					<div class="row">
+						<div class="col text-end">
+							<button class="btn btn-primary">Dodaj komentarz</button>
+						</div>
+					</div>
 				</form>
-			} else
+			}
+			else
 			{
-				<p style="font-size: 1rem; color: gray; text-align: center;">
-					Zgłoszenie zostało zamknięte, więc nie możesz go skomentować.
-				</p>
+				<div class="alert alert-info">
+					Zgłoszenie jest zamknięte, nie można go już komentować.
+				</div>
 			}
 		</div>
-
 	</div>
-</div>
+</page-layout>
 
-<script>
-	document.querySelectorAll('.update-status-btn').forEach((btn) => { 
-		btn.addEventListener('click', async (e) => {
-			const status = btn.getAttribute('data-status');
-			const id = btn.getAttribute('data-id');
+<style>
+	#comment-input {
+		height: 120px;
+	}
 
-			const res = await fetch(`/BugReports/UpdateStatus/${id}`, {
-				method: 'POST',
-				body: JSON.stringify(status),
-				headers: {
-					'Content-Type': 'application/json'
-				}
-			})
+	.bugreport .card-header {
+		padding: 0;
+		border: 0;
+		border-bottom-left-radius: 0;
+		border-bottom-right-radius: 0;
+	}
 
-			if (res.status === 200) {
-				window.location.reload()
-			}
+	.bugreport .list-group-item {
+		border-radius: 0;
+		border-bottom-left-radius: 0 !important;
+		border-left: 0;
+		border-bottom-right-radius: 0;
+	}
+
+	.bugreport .list-group-item:last-child {
+		border-right: 0;
+	}
+</style>
+
+@section Scripts {
+	<script>
+		document.getElementById('status-select').addEventListener('change', e => {
+			document.getElementById('status-submit').click()
 		})
-	})
-		
-
-</script>
+	</script>
+}

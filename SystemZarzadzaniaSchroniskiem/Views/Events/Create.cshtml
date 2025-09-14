@@ -1,0 +1,22 @@
+﻿@model Event
+
+@{
+  ViewData["Title"] = "Dodaj wydarzenie";
+}
+
+<page-layout title="@ViewData["Title"]" title-icon="bi-calendar2-week">
+  <div class="row">
+    <div class="col">
+      <form asp-action="Create" asp-controller="Events" method="post">
+        <div class="container d-flex flex-column gap-2">
+          <partial name="_EventForm" model="@Model"></partial>
+          <div class="row">
+            <div class="col">
+              <button class="btn btn-primary">Dodaj</button>
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</page-layout>

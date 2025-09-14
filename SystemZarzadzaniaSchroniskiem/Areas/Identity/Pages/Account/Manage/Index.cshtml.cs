@@ -21,12 +21,12 @@ public class IndexModel : PageModel
     private readonly UserManager<IdentityUser> _userManager;
     private readonly SignInManager<IdentityUser> _signInManager;
     private readonly IWebHostEnvironment _webHostEnvironment;
-    private readonly SystemZarzadzaniaSchroniskiemDbContext _context;
+    private readonly SystemZarzadzaniaSchroniskiem.Areas.Identity.Data.SchroniskoDbContext _context;
 
     public IndexModel(
         UserManager<IdentityUser> userManager,
         SignInManager<IdentityUser> signInManager,
-        SystemZarzadzaniaSchroniskiemDbContext context,
+        SystemZarzadzaniaSchroniskiem.Areas.Identity.Data.SchroniskoDbContext context,
         IWebHostEnvironment webHostEnvironment)
     {
         _userManager = userManager;

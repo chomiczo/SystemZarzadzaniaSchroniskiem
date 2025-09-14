@@ -1,0 +1,33 @@
+@model Timetable
+@{
+  var startTime = $"{Model.StartTime.Hour:d2}:{Model.StartTime.Minute:d2}";
+  var endTime = $"{Model.EndTime.Hour:d2}:{Model.EndTime.Minute:d2}";
+}
+
+<div class="timetable-item list-group-item">
+  <div class="flex-grow-1">
+    @Html.DisplayFor(p => p.Weekday)
+  </div>
+  <div class="d-flex gap-2">
+    @startTime – @endTime
+  </div>
+  <div>
+    <form asp-action="DeleteTimetable" asp-controller="Appointments" method="post">
+      @Html.HiddenFor(p => p.Id)
+
+      <button class="btn btn-outline-danger">
+        <icon name="fa-trash" />
+        Usuń
+      </button>
+    </form>
+  </div>
+</div>
+
+<style>
+  .timetable-item {
+    display: flex;
+    gap: 20px;
+    align-items: center;
+    justify-content: space-between;
+  }
+</style>

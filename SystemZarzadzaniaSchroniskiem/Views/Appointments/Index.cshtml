@@ -1,0 +1,82 @@
+@model List<Appointment>
+
+
+@{
+    ViewData["Title"] = "Twoje spotkania";
+    UserProfile? CurrentProfile = Context.Items["UserProfile"] as UserProfile;
+}
+
+<page-layout title="@ViewData["Title"]">
+
+    <div class="row">
+        <div class="col">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Typ</th>
+                        <th>Data</th>
+                        <th>Użytkownik</th>
+                        <th>Koordynator</th>
+                        <th>Zwierzę</th>
+                        <th></th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    @foreach (var appointment in Model)
+                    {
+                        <tr>
+                            <td>
+                                @appointment.Id
+                            </td>
+                            <td>
+                                @appointment.Name
+                            </td>
+                            <td>
+                                @appointment.AppointmentDate.CultureDateTime()
+                            </td>
+                            <td>
+                                @appointment.UserProfile.ProfileName()
+                            </td>
+                            <td>
+                                @appointment.StaffUserProfile.ProfileName()
+                            </td>
+                            <td>
+                                @if (appointment.Pet != null)
+                                {
+                                    @Html.DisplayFor(_ => @appointment.Pet.Species)
+                                    <span>&nbsp;</span>
+                                    @appointment.Pet.Name
+                                }
+                            </td>
+                            <td>
+                                @if (appointment.Type == AppointmentType.AdoptionMeeting && User.IsInRole("Administrator") || CurrentProfile == appointment.StaffUserProfile)
+                                {
+                                    <div class="dropdown text-end">
+                                        <a class="btn btn-sm btn-primary dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
+                                           aria-expanded="false">
+                                            Akcje
+                                        </a>
+                                        <ul class="dropdown-menu">
+                                            <a class="dropdown-item"
+                                               href="@Url.Action("AcceptAdoption", "Pets", new { PetId = appointment.PetId, AdopterId = appointment.UserProfileId, AdoptionStatus = AdoptionStatus.InTemporaryHome })">
+                                                <icon name="fa-check"></icon>
+                                                Zatwierdź właściciela
+                                            </a>
+                                            <a class="dropdown-item"
+                                               href="@Url.Action("DeleteConfirmation", "Appointments", new { Id = @appointment.Id })">
+                                                <icon name="fa-trash"></icon>
+                                                Usuń
+                                            </a>
+                                        </ul>
+                                    </div>
+                                }
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</page-layout>

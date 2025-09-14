@@ -1,0 +1,69 @@
+@using SystemZarzadzaniaSchroniskiem.Controllers
+@model AssignOwnerInput
+
+<div class="container d-flex flex-column gap-4">
+  <div class="row">
+
+    <h1 class="page-title">
+      <icon name="fa-user-plus" />
+      Nadaj opiekuna
+    </h1>
+  </div>
+
+  <div class="row">
+
+    <form asp-action="AssignOwner" asp-controller="Pets" method="post">
+      <input type="hidden" asp-for="PetId" value="@Model.PetId" />
+
+      <div class="container d-flex flex-column gap-2">
+        <div class="row">
+          <div class="col">
+            <div class="input-group">
+              <div class="input-group-text">
+                Opiekun
+              </div>
+
+              <select class="form-control" asp-for="OwnerProfileId">
+                @foreach (UserProfile up in ViewBag.Users)
+                {
+                  <option value="@up.Id">
+                    @up.FirstName
+                    @up.LastName
+                    (@up.User.Email)
+                  </option>
+                }
+              </select>
+            </div>
+          </div>
+          <div class="col-md-3">
+
+            <div class="input-group">
+              <div class="input-group-text">
+                Rodzaj opieki
+              </div>
+              <select class="form-control" asp-for="Status">
+                <option value="@AdoptionStatus.InTemporaryHome.ToString()">
+                  Dom tymczasowy
+                </option>
+                <option value="@AdoptionStatus.AdoptionCompleted.ToString()">
+                  Pełna adopcja
+                </option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-md-3 offset-md-9">
+            <button class="btn btn-primary w-100">Zatwierdź</button>
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+
+  <div class="row" style="background-color: var(--sc-white-20);">
+    <partial name="_PetDetails" model="@ViewBag.Pet"></partial>
+  </div>
+
+</div>

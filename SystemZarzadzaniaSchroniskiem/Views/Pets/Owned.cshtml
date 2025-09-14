@@ -1,0 +1,99 @@
+@model List<Pet>
+
+<div class="container d-flex flex-column gap-4">
+  <div class="row">
+    <h1 class="page-title">
+      <i class="fas fa-paw"></i>
+      Twoje Zwierzęta
+    </h1>
+  </div>
+
+  @if (Model.Count() < 1)
+  {
+    <div class="alert alert-primary">
+      <div class="alert-body">
+        Nie opiekujesz się w tej chwili żadnym zwierzęciem, ale zawsze możesz jakieś adopotować. Zapraszamy do <a
+          asp-action="Index">zapoznania się</a>
+        z naszymi zwierzętami!
+      </div>
+    </div>
+
+  }
+
+  @foreach (Pet pet in Model)
+  {
+    <div class="row">
+      <div class="accordion" id="details-accordion-@pet.Id">
+        <div class="accordion-item">
+          <h2 class="accordion-header">
+            <button class="accordion-button collapsed d-flex gap-4" type="button" data-bs-toggle="collapse"
+              data-bs-target="#details-@pet.Id" aria-expanded="false" aria-controls="details-@pet.Id">
+
+              <div class="d-flex gap-2">
+                @pet.Species.Icon()
+                <strong>@pet.Name</strong>
+              </div>
+
+              <div>
+                @pet.Breed.Name
+              </div>
+
+              <div>
+                @pet.Age.NumberSuffix("rok", "lata", "lat")
+              </div>
+
+              <div>
+                @pet.Weight
+                kg
+              </div>
+            </button>
+          </h2>
+
+          <div id="details-@pet.Id" class="accordion-collapse collapse" data-bs-parent="#details-accordion-@pet.Id">
+            <div class="accordion-body">
+              <partial model="@pet" name="_PetDetails" />
+            </div>
+          </div>
+        </div>
+
+        <div class="accordion-item">
+          <h2 class="accordion-header">
+            <button class="accordion-button collapsed d-flex gap-2" type="button" data-bs-toggle="collapse"
+              data-bs-target="#records-@pet.Id" aria-expanded="false" aria-controls="records-@pet.Id">
+              <i class="fas fa-heart-pulse"></i>
+              Kartoteka
+            </button>
+          </h2>
+
+          <div id="records-@pet.Id" class="accordion-collapse collapse" data-bs-parent="#details-accordion-@pet.Id">
+            <div class="accordion-body">
+              <ul class="list-group">
+                @foreach (var record in @pet.HealthRecords.ToList())
+                {
+                  <li class="list-group-item d-flex gap-4">
+                    <div>
+
+                      @record.CreationDate.CultureDate("d MMMM yyyy r., \\go\\d\\z. HH:mm")
+                    </div>
+                    <div>
+                      @record.Content
+                    </div>
+                  </li>
+
+                }
+              </ul>
+            </div>
+          </div>
+        </div>
+        <div class="accordion-item">
+          <div class="accordion-header p-2">
+            <a class="btn btn-sm btn-outline-primary"
+              href="@Url.Action("VeterinaryVisit", "Appointments", new { petId = @pet.Id })">
+              Zapisz do weterynarza
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  }
+</div>

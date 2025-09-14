@@ -1,10 +1,21 @@
 ﻿@page
 @model AccessDeniedModel
 @{
-    ViewData["Title"] = "Access denied";
+    ViewData["Title"] = "Brak dostępu";
 }
 
-<header>
-    <h1 class="text-danger">@ViewData["Title"]</h1>
-    <p class="text-danger">You do not have access to this resource.</p>
-</header>
+<div class="container">
+    <div class="row">
+        <div class="col-md-6 offset-md-3">
+            <div class="alert alert-danger rounded d-flex align-items-center">
+                <div class="p-4">
+                    <i class="fas fa-fingerprint" style="font-size: 4rem;"></i>
+                </div>
+                <div class="d-flex flex-column flex-grow-1 justify-content-center align-items-center">
+                    <h1>Brak Dostępu</h1>
+                    <p>Nie masz uprawnień do przeglądania tej strony.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

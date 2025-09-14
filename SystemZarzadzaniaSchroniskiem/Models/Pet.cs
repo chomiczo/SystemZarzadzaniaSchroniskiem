@@ -1,4 +1,8 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+using System.Configuration;
+using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
+using Microsoft.EntityFrameworkCore;
 
 namespace SystemZarzadzaniaSchroniskiem.Models
 {
@@ -20,13 +24,13 @@ namespace SystemZarzadzaniaSchroniskiem.Models
 
     public enum AdoptionStatus
     {
-        [Display(Name = "Przyjęte do schroniska")]
+        [Display(Name = "Przyjęto do schroniska")]
         Admitted,
         [Display(Name = "Oczekuje na adopcję")]
         AvailableForAdoption,
         [Display(Name = "Dom tymczasowy")]
         InTemporaryHome,
-        [Display(Name = "Adoptowane")]
+        [Display(Name = "Adoptowano")]
         AdoptionCompleted,
         [Display(Name = "Zmarło")]
         Deceased,
@@ -37,21 +41,29 @@ namespace SystemZarzadzaniaSchroniskiem.Models
         public int Id { get; set; }
 
         [Display(Name = "Imię")]
+        [Required(AllowEmptyStrings = false, ErrorMessage = "Pole Imię jest wymagane")]
         public string Name { get; set; } = null!;
 
 
         [Display(Name = "Opis")]
         public string? Description { get; set; }
 
-        [Display(Name = "Data Przyjęcia")]
+        [Display(Name = "Data przyjęcia do schroniska", ShortName = "Data przyjęcia")]
+        [Required(ErrorMessage = "Data przyjęcia do schroniska jest wymagana")]
         public DateTime AdmissionDate { get; set; }
 
-        [Display(Name = "Status Adopcji")]
+        [Display(Name = "Status adopcji")]
+        [Required(AllowEmptyStrings = false)]
         public AdoptionStatus AdoptionStatus { get; set; }
 
+        public int? OwnerProfileId { get; set; }
+        [Display(Name = "Opiekun")]
+        [DeleteBehavior(DeleteBehavior.SetNull)]
+        public UserProfile? OwnerProfile { get; set; }
 
-        [Display(Name = "Data Urodzenia")]
-        public DateOnly? BirthDate { get; set; }
+
+        [Display(Name = "Data urodzenia")]
+        public DateTime BirthDate { get; set; }
 
         [Display(Name = "Waga")]
         public double Weight { get; set; }
@@ -62,9 +74,27 @@ namespace SystemZarzadzaniaSchroniskiem.Models
         [Display(Name = "Płeć")]
         public Gender Gender { get; set; }
 
-        public int BreedId {  get; set; }
+        public int BreedId { get; set; }
 
         [Display(Name = "Rasa")]
+        [ValidateNever]
         public Breed Breed { get; set; } = null!;
+
+        [Display(Name = "Zdjęcie")]
+        public string? ImagePath { get; set; }
+
+        public List<HealthRecord> HealthRecords { get; set; } = [];
+
+        [NotMapped]
+        public IFormFile? FileUpload { get; set; }
+
+        [NotMapped]
+        public int Age
+        {
+            get
+            {
+                return DateTime.Now.Subtract(BirthDate).Days / 365;
+            }
+        }
     }
 }

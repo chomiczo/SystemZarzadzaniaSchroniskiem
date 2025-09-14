@@ -1,17 +1,40 @@
-﻿@model SystemZarzadzaniaSchroniskiem.Models.BugReport
-
-@section Styles {
-	<link rel="stylesheet" href="~/css/BugReport.css" />
+﻿@model BugReport
+@{
+	ViewData["Title"] = "Zgłoś błąd";
 }
 
-<div class="bugreport-container">
-	<h1>Zgłoś błąd</h1>
+<page-layout title="@ViewData["Title"]" title-icon="fa-bug">
+	@if (!User.IsInRole("Administrator"))
+	{
+		<div class="row">
+			<div class="col">
+				<a asp-action="Index" asp-controller="BugReports">Twoje zgłoszenia</a>
+			</div>
+		</div>
+	}
 
-	<a asp-action="Index" asp-controller="BugReports">Zobacz swoje zgłoszenia</a>
+	<div class="row">
+		<div class="col">
+			<form method="post">
+				<div class="container d-flex flex-column gap-2">
+					<div class="row">
+						<div class="col">
+							<div class="form-floating">
+								<textarea class="form-control" id="description" style="height: 200px;" placeholder="Opis błędu"
+									asp-for="Description"></textarea>
+								<label for="description">Opis błędu</label>
+							</div>
+						</div>
+					</div>
 
-	<form asp-action="Create" method="post">
-		<label asp-for="Description">Opis błędu</label>
-		<textarea asp-for="Description"></textarea>
-		<input type="submit" value="Zgłoś" />
-	</form>
-</div>
+					<div class="row">
+						<div class="col">
+							<button class="btn btn-primary">Wyślij zgłoszenie</button>
+						</div>
+					</div>
+				</div>
+			</form>
+		</div>
+	</div>
+
+</page-layout>

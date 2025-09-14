@@ -1,0 +1,84 @@
+@using Microsoft.AspNetCore.Identity
+@using Microsoft.AspNetCore.Mvc.ModelBinding
+@using SystemZarzadzaniaSchroniskiem.Controllers
+@model EditProfileModel
+
+@{
+    ViewData["Title"] = "Edycja profilu";
+}
+
+<page-layout title="@ViewData["Title"]" title-icon="fa-user">
+    <div class="row">
+        <div class="col">
+            @foreach (string role in ViewBag.Roles)
+            {
+                <div class="badge text-bg-primary">
+                    @Html.IconForRole(role)
+                    @Html.RoleName(role)
+                </div>
+            }
+        </div>
+    </div>
+    <div class="row">
+        <div class="col">
+            <form method="post" asp-action="Edit">
+                @Html.HiddenFor(p => p.Id)
+                <div class="container d-flex flex-column gap-2">
+                    <div class="row">
+                        <div class="col-md-6">
+                            @Html.FormInputFor(p => p.FirstName)
+                        </div>
+
+                        <div class="col-md-6">
+                            @Html.FormInputFor(p => p.LastName)
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col">
+                            <a class="btn btn-info" data-bs-toggle="collapse" data-bs-target="#password-row" href="#">
+                                Zmiana hasła
+                            </a>
+                        </div>
+                    </div>
+
+                    <div class="row collapse" id="password-row">
+                        <div class="container d-flex flex-column gap-2">
+                            <div class="row">
+                                <div class="col">
+                                    <div class="alert alert-primary m-0 d-flex flex-row gap-2 align-items-center">
+                                        <i class="fas fa-circle-info fs-3"></i>
+
+                                        Jeżeli nie chcesz zmieniać hasła, pozostaw poniższe pola puste.
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col">
+                                    @Html.FormInputFor(p => p.Password, "password")
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col">
+                                    @Html.FormInputFor(p => p.NewPassword, "password")
+                                </div>
+
+                                <div class="col">
+                                    @Html.FormInputFor(p => p.ConfirmPassword, "password")
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col text-end">
+                            <button class="btn btn-primary">Zatwierdź zmiany</button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</page-layout>

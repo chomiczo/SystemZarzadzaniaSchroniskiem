@@ -1,0 +1,130 @@
+﻿@model LoginModel
+@using SystemZarzadzaniaSchroniskiem.Helpers
+@using SystemZarzadzaniaSchroniskiem.Controllers
+
+@{
+    ViewData["Title"] = "Logowanie";
+}
+
+<div class="container d-flex flex-column gap-4">
+    <div class="row text-center">
+        <h1 class="d-flex align-items-center justify-content-center gap-4">
+            <i class="fas fa-person-through-window"></i>
+            Logowanie
+        </h1>
+    </div>
+
+    <div class="row">
+        <div asp-validation-summary="ModelOnly" class="alert alert-danger "></div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-6 offset-md-3">
+            <form method="post">
+                <div class="container d-flex gap-4 flex-column">
+                    <div class="row">
+                        <div class="col">
+                            @Html.FormInputFor(p => p.Email)
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            @Html.FormInputFor(p => p.Password, "password")
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6 d-flex align-items-center justify-content-center">
+                            <div class="form-check form-switch">
+                                <input class="form-check-input" type="checkbox" role="switch" id="remember-me-switch">
+                                <label class="form-check-label text-secondary" for="remember-me-switch" style="">
+                                    @Html.DisplayNameFor(p => p.RememberMe)
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <button class="btn btn-primary w-100" type="submit">
+                                Zaloguj się
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+
+        </div>
+
+        <div class="row text-center" style="margin-top: 5rem;">
+            <div class="col-md-8 d-flex justify-content-center align-items-stretch gap-4 offset-md-2">
+                <div class="container">
+                    <div class="row">
+
+                        <div class="col">
+
+                            <div class="card text-bg-primary">
+                                <div class="card-header p-3">
+                                    <h4 class="card-title d-flex gap-3 align-items-center justify-content-center"
+                                        style="color: var(--sc-orange);">
+                                        <i class="fas fa-user-secret fs-1"></i>
+
+                                        Nie masz konta?
+                                    </h4>
+                                </div>
+                                <div class="card-body">
+                                    <p class="card-text">
+                                        Zarejestruj się już teraz i znajdź najlepszego przyjaciela.
+                                    </p>
+                                    <a class="btn btn-secondary" asp-action="Register" asp-controller="UserProfiles">
+                                        Załóż Konto
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col">
+
+                            <div class="card bg-transparent" style="color: var(--sc-black-50);">
+                                <div class="card-header">
+                                    <h4 class="card-title d-flex gap-2 align-items-center justify-content-center">
+                                        <i class="fas fa-road-barrier fs-1 p-2"></i>
+
+                                        Problemy z logowaniem?
+                                    </h4>
+                                </div>
+                                <div class="card-body">
+                                    <p class="card-text">
+                                        Jeżeli zapomniałeś hasła lub nie dostałeś wiadomości z linkiem aktywacyjnym,
+                                        skorzystaj
+                                        z
+                                        poniższych opcji.
+                                    </p>
+                                    <div class="d-flex gap-2 justify-content-center">
+
+                                        <a class="text-secondary" asp-action="Reset" asp-controller="UserProfiles">
+                                            Zresetuj Hasło
+                                        </a>
+                                        <a class="text-secondary" asp-action="Reset" asp-controller="UserProfiles">
+                                            Wyślij link aktywacyjny
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
+
+<style>
+    input[type='checkbox'],
+    label {
+        cursor: pointer;
+    }
+</style>

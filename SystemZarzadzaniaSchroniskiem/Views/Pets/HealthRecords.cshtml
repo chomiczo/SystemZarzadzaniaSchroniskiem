@@ -1,0 +1,93 @@
+@model Pet
+
+
+@{
+  ViewData["Title"] = "Kartoteka zwierzęcia";
+  var records = ViewBag.HealthRecords as List<HealthRecord>;
+  records ??= new List<HealthRecord>();
+}
+
+<page-layout title="@ViewData["Title"]" title-icon="fa-heart-pulse">
+  <div class="container">
+    <div class="accordion" id="details-accordion">
+      <div class="accordion-item">
+        <h2 class="accordion-header">
+          <button class="accordion-button collapsed d-flex gap-4" type="button" data-bs-toggle="collapse"
+            data-bs-target="#details" aria-expanded="false" aria-controls="details">
+
+            <div class="d-flex gap-2">
+              @Model.Species.Icon()
+              <strong>@Model.Name</strong>
+            </div>
+
+            <div>
+              @Model.Breed.Name
+            </div>
+
+            <div>
+              @Model.Age.NumberSuffix("rok", "lata", "lat")
+            </div>
+
+            <div>
+              @Model.Weight
+              kg
+            </div>
+          </button>
+        </h2>
+
+        <div id="details" class="accordion-collapse collapse" data-bs-parent="#details-accordion">
+          <div class="accordion-body">
+            <partial model="@Model" name="_PetDetails" />
+          </div>
+        </div>
+      </div>
+
+      <div class="accordion-item">
+        <h2 class="accordion-header">
+          <button class="accordion-button d-flex gap-2" type="button" data-bs-toggle="collapse"
+            data-bs-target="#records" aria-expanded="true" aria-controls="records">
+            <i class="fas fa-heart-pulse"></i>
+            Kartoteka
+          </button>
+        </h2>
+
+        <div id="records" class="accordion-collapse collapse show" data-bs-parent="#details-accordion">
+          <div class="accordion-body">
+            <div class="container d-flex flex-column gap-2">
+              <div class="row">
+                <div class="col">
+
+                  <ul class="list-group">
+                    @foreach (var record in records)
+                    {
+                      <partial name="_HealthRecordListItem" model="@record" />
+                    }
+                  </ul>
+                </div>
+              </div>
+
+              <div class="row">
+                <div class="col">
+                  <form asp-action="CreateHealthRecord" method="post">
+                    <input type="hidden" name="PetId" value="@Model.Id">
+
+                    <div class="d-flex flex-row gap-2">
+                      <div class="form-floating flex-grow-1">
+                        <input class="form-control" type="text" name="Content" id="content-input"
+                          placeholder="Treść wpisu">
+                        <label for="content-input">Treść wpisu</label>
+                      </div>
+                      <button class="btn btn-primary">Dodaj</button>
+                    </div>
+                  </form>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</page-layout>

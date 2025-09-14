@@ -1,0 +1,28 @@
+@model BugReport
+
+
+<a class="bugreport-item list-group-item" href="@Url.Action("Details", "BugReports", new { Id = Model.Id })">
+  <div>
+    @Html.DisplayFor(p => p.Id)
+  </div>
+  <div>
+    @Model.Profile.ProfileName()
+  </div>
+  <div>
+    @Model.DateCreated.CultureDateTime()
+  </div>
+  <div>
+    @Html.DisplayFor(p => p.Status)
+  </div>
+</a>
+
+<style>
+  .bugreport-item:hover {
+    background-color: var(--sc-white-80);
+  }
+
+  .bugreport-item {
+    display: grid;
+    grid-template-columns: 50px repeat(3, 1fr);
+  }
+</style>

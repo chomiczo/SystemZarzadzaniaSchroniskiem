@@ -1,0 +1,36 @@
+@model Appointment
+
+<page-layout title="Usuń Spotkanie">
+
+  <div class="row">
+    <div class="col">
+
+      <div class="alert alert-danger">
+        <h4 class="alert-heading">
+          Czy jesteś pewien, że chcesz usunąć spotkanie?
+        </h4>
+        <div class="alert-body d-flex flex-column justify-content-center align-items-center gap-2">
+          <div class="list-group list-group-horizontal">
+            <div class="list-group-item">
+              @Html.DisplayFor(p => p.Id)
+            </div>
+            <div class="list-group-item">
+              @Model.Name
+            </div>
+            <div class="list-group-item">
+              @Model.UserProfile.ProfileName()
+            </div>
+            <div class="list-group-item">
+              @Model.StaffUserProfile.ProfileName()
+            </div>
+          </div>
+          <form asp-action="Delete" asp-controller="Appointments" method="post">
+            @Html.HiddenFor(p => p.Id)
+
+            <button class="btn btn-danger text-white">Usuń</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</page-layout>

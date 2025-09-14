@@ -1,0 +1,27 @@
+﻿<div class="container d-flex flex-column gap-4">
+
+	<div class="row d-flex flex-row align-items-center">
+		<div class="col">
+			<h1 class="page-title">
+
+				<i class="bi bi-database position-relative">
+					<i class="fas fa-cat position-absolute"
+						style="top: 0; left: 30%; font-size: 1rem; background-color: var(--sc-beige);"></i>
+				</i>
+
+				Baza Zwierząt
+			</h1>
+		</div>
+
+		<div class="col text-end">
+			<a class="btn btn-success text-light" asp-action="Create">
+				<i class="fas fa-plus"></i>
+				Dodaj Zwierzę
+			</a>
+		</div>
+	</div>
+
+	<div class="row">
+		<partial name="_Pets" />
+	</div>
+</div>

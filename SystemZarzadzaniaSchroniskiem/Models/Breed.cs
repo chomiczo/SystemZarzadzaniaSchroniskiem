@@ -1,4 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿using System.ComponentModel.DataAnnotations;
 using Microsoft.EntityFrameworkCore;
 
 namespace SystemZarzadzaniaSchroniskiem.Models
@@ -7,7 +7,9 @@ namespace SystemZarzadzaniaSchroniskiem.Models
     public class Breed
     {
         public int Id { get; set; }
+        [Display(Name = "Nazwa")]
         public string Name { get; set; } = null!;
+        [Display(Name = "Gatunek")]
         public Species Species { get; set; }
     }
 }

@@ -1,0 +1,39 @@
+@model UserProfile
+
+@{
+  ViewData["Title"] = "Grafik";
+}
+
+<page-layout title="Grafik" title-icon="fa-business-time">
+  <div class="row">
+    <div class="col">
+      <h2>@Model.ProfileName()</h2>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col d-flex gap-4 align-items-center">
+      @foreach (string role in ViewBag.Roles)
+      {
+        <div class="badge text-bg-primary d-flex gap-2 align-items-center">
+          @Html.IconForRole(role)
+          @Html.RoleName(role)
+        </div>
+      }
+    </div>
+  </div>
+  <div class="row">
+    <div class="col">
+      <div class="timetable list-group">
+        @foreach (Timetable t in Model.Timetables ?? [])
+        {
+          <partial name="_TimetableItem" model="@t" />
+        }
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col">
+      <partial name="_TimetableForm" model="@new Timetable { StaffUserProfile = Model, StaffUserProfileId = Model.Id }" />
+    </div>
+  </div>
+</page-layout>

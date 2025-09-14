@@ -1,10 +1,124 @@
-﻿@{
+﻿@using Humanizer
+@using SystemZarzadzaniaSchroniskiem.Helpers
+
+@{
     ViewData["Title"] = "Home Page";
+    List<Pet> pets = ViewBag.PetsForAdoption;
 }
 
-<div class="text-center">
-    <h1 class="display-4">
-        <i class="fas fa-shield-dog"></i>
-    </h1>
-    <h1>Adoptuj Zwierzaka</h1>
+@section Styles {
+    <link rel="stylesheet" type="text/css" href="~/css/home.css" />
+}
+
+
+<div class="container">
+    <div class="row">
+        <div class="home-container">
+            <div class="card home-card shadow" id="home-card-pet">
+                <h1 class="card-header display-3">
+                    <icon name="fa-shield-cat" />
+                    <span class="fs-3">Znajdź przyjaciela</span>
+                </h1>
+                <div class="card-body p-4">
+                    <h4>Adoptuj Zwierzaka</h4>
+                    <p class="card-text">
+                        Codziennie do naszego schroniska trafiają zwierzęta,
+                        które możesz adoptować, a korzystając z naszej
+                        kompleksowej pomocy, masz niepowtarzalną szansę nawiązać
+                        z jednym z nich wspaniałą przyjaźń.
+                    </p>
+                </div>
+                <div class="list-group list-group-flush">
+                    <a class="list-group-item btn text-bg-warning fw-bold" asp-action="Index" asp-controller="Pets">
+                        Przeglądaj naszych podopiecznych
+                        <icon name="fa-arrow-right" />
+                    </a>
+                </div>
+            </div>
+
+            <div class="card home-card shadow" id="home-card-med">
+                <h1 class="card-header display-3">
+                    <icon name="fa-heart-pulse" />
+                    <span class="fs-3">Dbaj o zdrowie</span>
+                </h1>
+                <div class="card-body">
+                    <div class="list-group list-group-flush">
+                        <div class="list-group-item p-4">
+                            <h4 class="">Nasi weterynarze</h4>
+                            <p class="card-text">
+                                Nasi specjaliści mają doświadczenie.
+                            </p>
+                            <a class="btn btn-primary" asp-controller="Pets" asp-action="Owned">
+                                Umów Zwierzaka do weterynarza
+                            </a>
+                        </div>
+                        @* <div class="list-group-item p-4">
+                            <h4 class="">Terapia ze zwierzętami</h4>
+                            <a class="btn btn-primary" asp-controller="Appointments" asp-action="Index">
+                                Zapisz się na terapię
+                            </a>
+                        </div> *@
+                    </div>
+                </div>
+            </div>
+
+            <div class="card home-card shadow" id="home-card-help">
+                <h1 class="card-header display-3">
+                    <icon name="fa-handshake-angle" />
+                    <span class="fs-3">Zaangażuj się</span>
+                </h1>
+                <div class="card-body">
+                    <div class="d-flex flex-column gap-4">
+                        <div>
+                            <h4>Bierz udział w wydarzeniach</h4>
+                            <div class="d-flex flex-column gap-2">
+                                @foreach (Event evt in ViewBag.Events)
+                                {
+                                    <div class="card">
+                                        <div
+                                            class="card-header p-2 text-bg-primary d-flex flex-row justify-content-between">
+                                            <div>
+                                                @evt.Name
+                                            </div>
+                                            <div>
+                                                @evt.StartDate.CultureDate("d MMMM yyyy, HH:mm")
+                                            </div>
+                                        </div>
+
+                                        <div class="list-group list-group-flush">
+                                            <div class="list-group-item">
+                                                <icon name="fa-location-dot" />
+                                                @evt.Location
+                                            </div>
+                                        </div>
+
+                                        <div class="card-body">
+                                            @evt.Description
+                                        </div>
+                                    </div>
+                                }
+                                <a class="btn btn-outline-primary" asp-action="Index" asp-controller="Events">
+                                    Przeglądaj wszystkie wydarzenia
+                                </a>
+                            </div>
+                        </div>
+
+                        <hr />
+
+                        <div>
+                            <h4>Zostań wolontariuszem</h4>
+                            <p>
+                                Chcesz pomóc w codziennym funkcjonowaniu naszej
+                                placówki? Zarejestruj się i skontaktuj z
+                                dowolnym pracownikiem.
+                            </p>
+                            <a class="btn btn-outline-primary" asp-action="Register" asp-controller="UserProfiles">
+                                Przejdź do rejestracji
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>

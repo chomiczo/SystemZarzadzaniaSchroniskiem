@@ -1,0 +1,21 @@
+.form-control:not(button),
+.form-select {
+  background-color: var(--sc-white-70);
+}
+
+.is-invalid {
+  background-color: var(--sc-red-20);
+}
+
+.validation-summary-errors {
+  background-color: var(--sc-red-50);
+  border-color: var(--sc-red);
+}
+
+.validation-summary-errors ul {
+  margin: 0;
+}
+
+.field-validation-error {
+  color: var(--sc-darkred);
+}

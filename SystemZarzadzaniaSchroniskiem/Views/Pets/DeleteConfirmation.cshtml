@@ -1,0 +1,28 @@
+﻿@model SystemZarzadzaniaSchroniskiem.Models.Pet
+
+
+<div class="container d-flex flex-column gap-4">
+    <div class="row">
+        <div class="col">
+            <h1 class="page-title">
+                Usuń Zwierzę
+            </h1>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="alert alert-danger text-center">
+            <p>
+                Czy jesteś pewien, że chcesz usunąć Zwierzę?
+            </p>
+
+            <form asp-action="Delete">
+                <input type="hidden" asp-for="Id" />
+                <input type="submit" value="Usuń" class="btn btn-danger text-white" />
+            </form>
+        </div>
+    </div>
+
+    <partial name="_PetDetails"></partial>
+
+</div>

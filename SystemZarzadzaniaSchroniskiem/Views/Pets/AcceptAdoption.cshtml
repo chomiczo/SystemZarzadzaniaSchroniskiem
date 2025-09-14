@@ -1,0 +1,50 @@
+@using SystemZarzadzaniaSchroniskiem.Controllers;
+@model AcceptAdoptionInput;
+
+
+<page-layout title="Zatwierdź Adopcję">
+
+    <div class="row">
+        <div class="col">
+            <form asp-action="AcceptAdoption" method="post">
+                <div class="alert alert-primary d-flex flex-column gap-2">
+
+                    <div class="list-group list-group-horizontal">
+                        <div class="list-group-item">
+                            <strong>Adoptujący</strong>
+                        </div>
+                        <div class="list-group-item">
+                            @Model.Adopter.ProfileName()
+                        </div>
+                    </div>
+
+                    <div class="list-group list-group-horizontal">
+                        <div class="list-group-item">
+                            <strong>Zwierzę</strong>
+                        </div>
+                        <div class="list-group-item">
+                            @Html.DisplayFor(p => p.Pet.Species) @Model.Pet.Name
+                        </div>
+                    </div>
+
+                    <input type="hidden" name="PetId" value="@Model.PetId">
+                    <input type="hidden" name="AdopterId" value="@Model.AdopterId">
+                    <div class="input-group">
+                        <span class="input-group-text">Rodzaj adopcji</span>
+                        <select class="form-control" name="Status" value="@Model.Status">
+                            <option value="@AdoptionStatus.InTemporaryHome.ToString()">
+                                Dom tymczasowy
+                            </option>
+                            <option value="@AdoptionStatus.AdoptionCompleted.ToString()">
+                                Pełna adopcja
+                            </option>
+                        </select>
+                    </div>
+                    <button class="btn btn-primary">Zatwierdź</button>
+
+                </div>
+            </form>
+        </div>
+    </div>
+
+</page-layout>

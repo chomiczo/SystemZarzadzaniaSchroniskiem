@@ -1,42 +1,176 @@
 ﻿<!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - SystemZarzadzaniaSchroniskiem</title>
-    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <title>@ViewData["Title"] - Schronisko</title>
+    @* <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" /> *@
     <link rel="stylesheet" href="~/lib/bootstrap-icons/bootstrap-icons.min.css" />
     <link rel="stylesheet" href="~/lib/font-awesome/regular.css" />
     <link rel="stylesheet" href="~/lib/font-awesome/solid.css" />
     <link rel="stylesheet" href="~/lib/font-awesome/all.min.css" />
-    <link rel="stylesheet" href="~/SystemZarzadzaniaSchroniskiem.styles.css" asp-append-version="true" />
+
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/forms.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/SystemZarzadzaniaSchroniskiem.styles.css" asp-append-version="true" />
     @await RenderSectionAsync("Styles", required: false)
+    <style>
+        .nav-link {
+            border-bottom: 2px solid transparent;
+        }
+
+        .nav-link:hover,
+        .nav-link:active {
+            border-bottom: 2px solid var(--sc-orange-80) !important;
+            color: var(--sc-orange) !important;
+            using Microsoft.AspNetCore.Razor.Language.Intermediate;
+
+            #line default #line hidden #nullable disable ullable disable
+        }
+
+        #messages {
+            position: fixed;
+            top: 0;
+            left: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+            margin: -20px;
+            margin-top: 80px;
+        }
+
+        .view-message {
+            background-color: #fff8;
+            backdrop-filter: blur(4px);
+            transition: opacity 0.4s;
+            width: 80vw;
+        }
+
+        .view-message .btn-close {
+            background-color: #fff8;
+        }
+
+        .view-message:hover {
+            opacity: 1;
+        }
+
+        .view-message-Primary {
+            background-color: var(--sc-navy-80);
+            color: var(--sc-white-80);
+        }
+
+        .view-message-Primary .toast-header {
+            color: var(--sc-lightblue);
+        }
+
+        .view-message-Success {
+            background-color: var(--sc-green-80);
+            color: var(--sc-white-80);
+        }
+
+        .view-message-Success .toast-header {
+            color: var(--sc-white-60);
+        }
+
+        .view-message-Danger {
+            background-color: var(--sc-red-80);
+        }
+
+        .view-message-Danger .toast-header {
+            color: var(--sc-white-80);
+        }
+
+        .view-message-Alert {
+            background-color: var(--sc-yellow-80);
+        }
+
+        .view-message-Alert .toast-header {
+            color: var(--sc-white-80);
+        }
+
+        #debug {
+            position: fixed;
+            top: 60px;
+            left: 0;
+            background-color: #0002;
+            color: white;
+            z-index: 100;
+            padding: 4px;
+            font-family: monospace;
+            font-size: 12px;
+        }
+
+        #debug:hover {
+            background-color: #000f;
+
+        }
+    </style>
+
 </head>
 
-<body>
-    <partial name="_NavbarPartial" />
-    <div class="container">
-        <main role="main" class="pb-3">
-            @RenderBody()
-        </main>
-    </div>
 
-    <footer class="border-top footer text-muted">
+<body>
+    @* <div id="debug">
+        <div>xs: 0</div>
+        <div>sm: 576px</div>
+        <div>md: 768px</div>
+        <div>lg: 992px</div>
+        <div>xl: 1200px</div>
+        <div>xxl: 1400px</div>
+    </div> *@
+    <header>
+        <partial name="Navbar" />
+    </header>
+
+    <main role="main" style="min-height: 88vh; padding: 50px 0;">
+        @RenderBody()
+        @if (TempData["ViewMessage"] != null)
+        {
+            var messageType = TempData["ViewMessageType"] ?? "primary";
+
+            <div id="messages" class="toast-container">
+                <div class="toast view-message view-message-@messageType show" role="alert" aria-live="assertive"
+                    data-bs-autohide="false" aria-atomic="true">
+                    <div class="toast-header" style="background-color: rgba(0,0,0,0.25); backdrop-filter: blur(4px);">
+                        <strong class="me-auto">
+                            @TempData["ViewMessageTitle"]
+                        </strong>
+                        @* <small>11 mins ago</small> *@
+                        <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+                    </div>
+                    <div class="toast-body">
+                        @TempData["ViewMessage"]
+                    </div>
+                </div>
+            </div>
+        }
+    </main>
+
+    <footer class="border-top footer p-4" style="background-color: var(--sc-orange-80);">
         <div class="container">
             &copy; 2025 - Schronisko -
             <a asp-controller="Home" asp-action="Privacy" class="link-secondary">Polityka prywatności</a>
             @if (!User.IsInRole("Administrator"))
             {
-              <span>-</span>
-			  <a asp-area="" asp-controller="BugReports" asp-action="Create" class="link-secondary">Zgłoś Błąd</a>
+                <span>-</span>
+                <a asp-area="" asp-controller="BugReports" asp-action="Create" class="link-secondary">Zgłoś Błąd</a>
             }
         </div>
     </footer>
 
+
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
+    <script>
+        const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]')
+        const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
+    </script>
+
     @await RenderSectionAsync("Scripts", required: false)
 </body>
+
+
 </html>

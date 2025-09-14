@@ -1,96 +1,109 @@
-﻿using SystemZarzadzaniaSchroniskiem.Areas.Identity.Data;
-using SystemZarzadzaniaSchroniskiem.Models;
+﻿using SystemZarzadzaniaSchroniskiem.Models;
 using SystemZarzadzaniaSchroniskiem.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using SystemZarzadzaniaSchroniskiem.Areas.Identity.Data;
+using Microsoft.AspNetCore.Identity.UI.Services;
+using System.Threading.Tasks;
+using System.Net.WebSockets;
 
 namespace SystemZarzadzaniaSchroniskiem.Controllers
 {
     [Authorize]
-    public class BugReportsController : Controller
+    public class BugReportsController : SchroniskoController
     {
         public delegate void BugReportEventHandler(object sender, BugReportEventArgs e);
 
         public event BugReportEventHandler BugReportCreated;
         public event BugReportEventHandler BugReportCommentCreated;
 
-        private readonly SystemZarzadzaniaSchroniskiemDbContext _context;
-        private readonly UserManager<IdentityUser> _userManager;
         private readonly BugReportService _bugReportService;
 
-        public BugReportsController(SystemZarzadzaniaSchroniskiemDbContext context, UserManager<IdentityUser> userManager, BugReportService bugReportService)
+        public BugReportsController(
+            SchroniskoDbContext context,
+            IWebHostEnvironment env,
+            UserManager<IdentityUser> userManager,
+            SignInManager<IdentityUser> signInManager,
+            IUserStore<IdentityUser> userStore,
+            IEmailSender sender,
+            ILogger<SchroniskoController> logger,
+            BugReportService bugReportService) : base(
+                context, env, userManager, signInManager, userStore, sender, logger)
         {
-            _context = context;
-            _userManager = userManager;
             _bugReportService = bugReportService;
-
             BugReportCreated += _bugReportService.OnBugReportCreated;
             BugReportCommentCreated += _bugReportService.OnBugReportCommentCreated;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            var uid = _userManager.GetUserId(User);
             List<BugReport> reports;
-            bool isAdmin = User.IsInRole("Administrator");
+
+            if (HttpContext.Items["UserProfile"] is not UserProfile profile)
+            {
+                return Forbid();
+            }
+
+            bool isAdmin = await _userManager.IsInRoleAsync(profile.User, "Administrator");
 
             if (isAdmin)
             {
-                reports = _context.BugReports?.Include(br => br.User).ToList() ?? new List<BugReport>();
-            } else
+                reports = await _dbContext.BugReports.Include(br => br.Profile).ThenInclude(p => p.User).ToListAsync();
+            }
+            else
             {
-                reports = _context.BugReports?.Where(r => r.UserId == uid).ToList() ?? new List<BugReport>();
+                reports = await _dbContext.BugReports.Where(r => r.ProfileId == profile.Id).ToListAsync();
             }
 
-            ViewBag.Reports = reports;
-            ViewBag.IsAdmin = isAdmin;
-            return View();
+            return View(reports);
         }
 
         [HttpGet]
-        public IActionResult Details(int? id)
+        public async Task<IActionResult> Details(int id)
         {
-            if (id == null)
+            if (HttpContext.Items["UserProfile"] is not UserProfile profile)
             {
-                return RedirectToAction("Index");
+                return Forbid();
             }
 
-            var report = _context.BugReports?.Include(br => br.User).FirstOrDefault(br => br.Id == id);
-            var uid = _userManager.GetUserId(User);
+            var report = _dbContext.BugReports
+                .Include(br => br.Profile)
+                .ThenInclude(p => p.User)
+                .Include(br => br.Comments)
+                .FirstOrDefault(br => br.Id == id);
 
-            if (report == null || (!User.IsInRole("Administrator") && report.UserId != uid))
-            {
-                return RedirectToAction("Index");
-            }
-
-            var comments = _context.BugReportComments?.Where(brc => brc.BugReportId == report.Id).ToList();
-            ViewBag.Comments = comments ?? new List<BugReportComment>();
-
-            return View(report);
-        }
-
-        [HttpPost]
-        public async Task<IActionResult> UpdateStatus(int id, [FromBody] string status)
-        {
-            var report = _context.BugReports?.FirstOrDefault(br => br.Id == id);
             if (report == null)
             {
                 return NotFound();
             }
 
-            if (!Enum.TryParse(status, out BugReportStatus reportStatus))
+            var isAdmin = await _userManager.IsInRoleAsync(profile.User, "Administrator");
+
+            if (!isAdmin && report.Profile != profile)
             {
-                return BadRequest();
+                return Forbid();
             }
 
-            report.Status = reportStatus;
-            _context.Update(report);
+            return View(report);
+        }
 
-            await _context.SaveChangesAsync();
+        [HttpPost]
+        [Authorize(Roles = "Administrator")]
+        public async Task<IActionResult> ChangeStatus(int BugReportId, BugReportStatus Status)
+        {
+            var report = await _dbContext.BugReports.SingleOrDefaultAsync(br => br.Id == BugReportId);
+            if (report == null)
+            {
+                return NotFound();
+            }
 
-            return Ok();
+            report.Status = Status;
+
+            await _dbContext.SaveChangesAsync();
+
+            return RedirectToAction("Details", new { Id = report.Id });
         }
 
 
@@ -98,10 +111,14 @@ namespace SystemZarzadzaniaSchroniskiem.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> CreateComment([Bind("Content,BugReportId")] BugReportComment comment)
         {
+            if (HttpContext.Items["UserProfile"] is not UserProfile profile)
+            {
+                return Forbid();
+            }
             comment.DateCreated = DateTime.Now;
-            comment.UserId = _userManager.GetUserId(User);
-            _context.Add(comment);
-            await _context.SaveChangesAsync();
+            comment.ProfileId = profile.Id;
+            _dbContext.Add(comment);
+            await _dbContext.SaveChangesAsync();
             BugReportCommentCreated?.Invoke(this, new BugReportEventArgs { Comment = comment });
 
             return RedirectToAction("Details", new { Id = comment.BugReportId });
@@ -116,11 +133,15 @@ namespace SystemZarzadzaniaSchroniskiem.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Description")] BugReport report)
         {
+            if (HttpContext.Items["UserProfile"] is not UserProfile profile)
+            {
+                return Forbid();
+            }
             report.DateCreated = DateTime.Now;
             report.Status = BugReportStatus.Open;
-            report.UserId = _userManager.GetUserId(User);
-            _context.Add(report);
-            await _context.SaveChangesAsync();
+            report.ProfileId = profile.Id;
+            _dbContext.Add(report);
+            await _dbContext.SaveChangesAsync();
             BugReportCreated?.Invoke(this, new BugReportEventArgs { Report = report });
             return RedirectToAction("Details", new { Id = report.Id });
         }

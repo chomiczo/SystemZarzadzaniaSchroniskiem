@@ -1,0 +1,22 @@
+@model Timetable
+
+
+<form asp-action="CreateTimetable" asp-controller="Appointments" method="post">
+  @Html.HiddenFor(p => p.StaffUserProfileId)
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-3">
+        @Html.FormSelectFor(p => p.Weekday)
+      </div>
+      <div class="col-lg-3">
+        @Html.FormInputFor(p => p.StartTime, "time")
+      </div>
+      <div class="col-lg-3">
+        @Html.FormInputFor(p => p.EndTime, "time")
+      </div>
+      <div class="col-lg-3">
+        <button class="btn btn-primary w-100">Dodaj</button>
+      </div>
+    </div>
+  </div>
+</form>

@@ -1,0 +1,12 @@
+@model Breed
+
+@{
+  ViewData["Title"] = "Edycja rasy";
+  ViewBag.BreedFormButton = "Zatwierdź zmiany";
+}
+
+<page-layout title="@ViewData["Title"]">
+  <form asp-action="EditBreed" method="post">
+    <partial name="_BreedForm" />
+  </form>
+</page-layout>

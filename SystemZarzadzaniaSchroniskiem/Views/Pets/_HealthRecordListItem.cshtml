@@ -1,0 +1,27 @@
+@model HealthRecord
+
+<li class="list-group-item health-record-item">
+    <div class="d-flex flex-column gap-1">
+        <div class="d-flex flex-row gap-2 align-items-center justify-content-between w-100"
+             style="font-size: 0.8rem; color: var(--sc-black-40);">
+            <div>
+                @Model.CreationDate.CultureDateTime()
+            </div>
+            <div class="d-flex flex-row gap-1 align-items-center">
+                <div>
+                    @Model.UserProfile.ProfileName("{F} {l}")
+                </div>
+                <form asp-action="DeleteHealthRecord" asp-controller="Pets" method="post">
+                    <input type="hidden" name="Id" value="@Model.Id">
+                    <input type="hidden" name="PetId" value="@Model.PetId">
+                    <button class="btn btn-sm text-danger" data-bs-toggle="tooltip" data-bs-title="Usuń">
+                        <icon name="fa-trash" />
+                    </button>
+                </form>
+            </div>
+        </div>
+        <div>
+            @Model.Content
+        </div>
+    </div>
+</li>

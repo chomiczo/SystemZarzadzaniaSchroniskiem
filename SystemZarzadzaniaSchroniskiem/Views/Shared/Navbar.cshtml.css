@@ -1,0 +1,10 @@
+﻿#navbar {
+  padding: 10px;
+}
+
+#navbar-brand {
+  text-decoration: none;
+}
+#navbar-brand i {
+  font-size: 2rem;
+}

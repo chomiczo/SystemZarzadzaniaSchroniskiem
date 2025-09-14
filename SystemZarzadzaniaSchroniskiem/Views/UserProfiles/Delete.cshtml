@@ -1,0 +1,68 @@
+@using SystemZarzadzaniaSchroniskiem.Controllers
+@model ProfileWithRoles
+
+@{
+  ViewData["Title"] = "Usuń użytkownika";
+}
+
+<div class="container">
+  <div class="row">
+    <div class="col">
+      <div class="alert alert-danger">
+        <h4 class="alert-heading d-flex gap-2">
+          <i class="fas fa-user-xmark"></i>
+          Czy jesteś pewien, że chcesz usunąć użytkownika?
+        </h4>
+
+        <div class="container d-flex flex-column gap-2">
+
+          <div class="row">
+            <div class="col">
+              <ul class="list-group list-group-horizontal">
+                <li class="list-group-item">
+                  @Html.DisplayFor(p => p.Profile.Id)
+                </li>
+                <li class="list-group-item">
+                  <i class="fas fa-user"></i>
+                  @Html.DisplayFor(p => p.Profile.FirstName)
+                  @Html.DisplayFor(p => p.Profile.LastName)
+                </li>
+                <li class="list-group-item">
+                  <i class="fas fa-envelope"></i>
+                  @Html.DisplayFor(p => p.Profile.User.Email)
+                </li>
+              </ul>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-6">
+              <ul class="list-group">
+                @foreach (var role in Model.Roles)
+                {
+                  <li class="list-group-item d-flex flex-row gap-2 align-items-center">
+                    @Html.IconForRole(role)
+                    @Html.RoleName(role)
+                  </li>
+                }
+              </ul>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col">
+              <form method="post" asp-action="DeleteProfile">
+                <input type="hidden" value="@Model.Profile.Id" name="Id" />
+
+                <button class="btn btn-danger text-white">
+                  <i class="fas fa-xmark"></i>
+                  Usuń
+                </button>
+              </form>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

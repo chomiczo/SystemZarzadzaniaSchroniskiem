@@ -1,128 +1,119 @@
 ﻿@model IEnumerable<SystemZarzadzaniaSchroniskiem.Models.Pet>
+@using System.Globalization
+@using SystemZarzadzaniaSchroniskiem.Helpers
 
-<ul class="list-group">
+@{
+	var culture = CultureInfo.CreateSpecificCulture("pl-PL");
+}
+
+
+<div asp-validation-summary="All" class="text-danger"></div>
+
+<ul class="list-group" id="pets-list">
 	@foreach (var pet in Model)
 	{
 		<li class="list-group-item pet-list-item">
 			<div class="container">
 				<div class="row">
-					<div class="col-2">
-						@if (pet.Species == Species.Dog)
-						{
-							<i class="fas fa-dog" style="font-size: 1.5rem;"></i>
-						} else
-						{
-							<i class="fas fa-cat" style="font-size: 1.5rem;"></i>
-						}
+					<div class="col-lg-2">
+						@pet.Species.Icon()
 						&nbsp;
 						@if (pet.Gender == Gender.Male)
 						{
-							<i class="bi bi-gender-male fw-bold"></i>
-						} else
+							<icon name="fa-mars" />
+						}
+						else
 						{
-							<i class="bi bi-gender-female fw-bold"></i>
+							<icon name="fa-venus" />
 						}
 						@Html.DisplayFor(_ => pet.Name)
 					</div>
 
-					<div class="col-2">
+					<div class="col-lg-2">
 						<small class="badge pet-status-badge pet-status-@pet.AdoptionStatus">
 							@Html.DisplayFor(_ => pet.AdoptionStatus)
 						</small>
 					</div>
 
-					<div class="col-2">
+					<div class="col-lg-3">
 						@Html.DisplayFor(_ => pet.Breed.Name),
-						@{
-							var age = (int)( DateTime.Now.Subtract(new DateTime(pet.BirthDate ?? new DateOnly(), new TimeOnly())).TotalDays / 365);
-						}
-						@age lat
+						@pet.Age.NumberSuffix("rok", "lata", "lat")
+
 					</div>
 
-					<div class="col-6 d-flex justify-content-end" style="gap: 10px;">
-						<button class="btn btn-sm btn-primary">
-							<i class="far fa-pen-to-square"></i>
+					<div class="col-lg-3">
+						@pet.OwnerProfile?.FirstName
+						@pet.OwnerProfile?.LastName
+						@pet.OwnerProfile?.User.Email
 
-							Edytuj
+					</div>
 
-							<div class="tooltip">
-								<div class="tooltip-inner">Edytuj zwierzę</div>
-							</div>
-						</button>
-
-						<button class="btn btn-sm btn-outline-danger">
-							<i class="fas fa-trash-can"></i>
-
-							Usuń
-
-							<div class="tooltip">
-								<div class="tooltip-inner">Usuń zwierzę</div>
-							</div>
-						</button>
-
-						<button class="btn btn-secondary btn-sm pet-collapse-btn" data-bs-toggle="collapse" data-bs-target="#collapse-@pet.Id" aria-expanded="false">
+					<div class="col-lg-2 d-flex justify-content-end" style="gap: 10px;">
+						<button class="btn btn-outline-secondary btn-sm pet-collapse-btn" data-bs-toggle="collapse"
+							data-bs-target="#collapse-@pet.Id" aria-expanded="false">
 							<i class="fas pet-collapse-icon"></i>
 
 							<span class="pet-collapse-text">Szczegóły</span>
 						</button>
+
+						<div class="dropdown text-end">
+							<button class="btn btn-sm btn-primary dropdown-toggle" role="button" data-bs-toggle="dropdown"
+								aria-expanded="false">
+								Akcje
+							</button>
+
+							<ul class="dropdown-menu">
+								<a class="dropdown-item" href="@Url.Action("HealthRecords", "Pets", new { Id = @pet.Id })"
+									data-bs-toggle="tooltip" data-bs-title="Przeglądaj kartotekę medyczną" data-bs-placement="left">
+									<icon name="fa-heart-pulse" />
+									Kartoteka
+								</a>
+
+								<a class="dropdown-item" href="@Url.Action("AssignOwner", "Pets", new { PetId = @pet.Id })">
+									<icon name="fa-user-plus" />
+									Nadaj opiekuna
+								</a>
+
+								<a class="dropdown-item " href="@Url.Action("Edit", "Pets", new { Id = pet.Id })">
+									<icon name="fa-pencil" />
+									Edytuj
+								</a>
+
+								<a class="dropdown-item " href="@Url.Action("DeleteConfirmation", "Pets", new { Id = @pet.Id })">
+									<icon name="fa-xmark" />
+									Usuń
+								</a>
+							</ul>
+						</div>
+					</div>
+
+					<div class="row collapse p-4" id="collapse-@pet.Id">
+						<partial name="_PetDetails" model="@pet" />
 					</div>
 				</div>
-				<div class="row collapse" id="collapse-@pet.Id">
-					<div class="container">
-						More info on the pet.
-					</div>
-				</div>
-			</div>
-	</li>
-}
+		</li>
+	}
 </ul>
 
+
 <style>
-	.pet-status-badge {
-		width: 100%;
+	.pet-collapse-btn[aria-expanded=false] {
+		.pet-collapse-icon::before {
+			content: "\f078"
+		}
 	}
 
-	.pet-collapse-btn {
-		display: inline-flex;
-		justify-content: center;
-		align-items: center;
-		gap: 10px;
+	.pet-collapse-btn[aria-expanded="true"] {
+		.pet-collapse-icon::before {
+			content: "\f077"
+		}
 	}
 
-	.pet-collapse-btn[aria-expanded=false] .pet-collapse-icon::before {
-		content: var(--fa-chevron-down);
-	}
-
-	.pet-collapse-btn[aria-expanded=true] .pet-collapse-icon::before {
-		content: "\f077";
-	}
-
-	.pet-status-Admitted {
-		background-color: var(--sc-yellow);
-		color: #000;
-	}
-
-	.pet-status-AvailableForAdoption {
-		background-color: var(--sc-blue);
-	}
-
-	.pet-status-Deceased {
-		background-color: var(--sc-black-50);
-	}
-
-	.pet-status-InTemporaryHome {
-		background-color: var(--sc-lightblue);
-	}
-
-	.pet-status-AdoptionCompleted {
-		background-color: var(--sc-green);
-	}
-
-	.pet-list-item .bi-gender-male {
+	.fa-mars {
 		color: var(--sc-blue);
 	}
 
-	.pet-list-item .bi-gender-female {
-		color: var(--bs-pink);
+	.fa-venus {
+		color: deeppink;
 	}
 </style>

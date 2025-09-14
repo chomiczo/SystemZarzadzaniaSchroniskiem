@@ -1,20 +1,29 @@
 using System.Diagnostics;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using SystemZarzadzaniaSchroniskiem.Models;
 
 namespace SystemZarzadzaniaSchroniskiem.Controllers
 {
-    public class HomeController : Controller
+    public class HomeController(
+        Areas.Identity.Data.SchroniskoDbContext context,
+        IWebHostEnvironment env,
+        UserManager<IdentityUser> userManager,
+        SignInManager<IdentityUser> signInManager,
+        IUserStore<IdentityUser> userStore,
+        IEmailSender sender,
+        ILogger<SchroniskoController> logger) : SchroniskoController(
+            context, env, userManager, signInManager, userStore, sender, logger)
     {
-        private readonly ILogger<HomeController> _logger;
-
-        public HomeController(ILogger<HomeController> logger)
+        public async Task<IActionResult> Index()
         {
-            _logger = logger;
-        }
+            var events = await _dbContext.Events
+                .Where(evt => evt.StartDate > DateTime.Now)
+                .OrderBy(evt => evt.StartDate).Take(2).ToListAsync();
+            ViewBag.Events = events;
 
-        public IActionResult Index()
-        {
             return View();
         }
 
@@ -23,10 +32,17 @@ namespace SystemZarzadzaniaSchroniskiem.Controllers
             return View();
         }
 
-        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        public IActionResult Error()
+        public IActionResult Error(int? id)
         {
+            ViewBag.StatusCode = id;
+
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+        }
+
+
+        public IActionResult NotFoundPage()
+        {
+            return View();
         }
     }
 }

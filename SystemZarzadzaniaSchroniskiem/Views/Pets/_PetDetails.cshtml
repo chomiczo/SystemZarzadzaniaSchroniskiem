@@ -1,0 +1,94 @@
+@model Pet
+
+@{
+  Pet pet = Model;
+}
+
+<div class="container p-2">
+  <div class="d-flex gap-2">
+    <div class="pet-image">
+      <img class="img-thumbnail" src="@Url.Content($"~/uploads/{pet.ImagePath}")" />
+    </div>
+
+    <div class="pet-details">
+      <div class="pet-description p-2">
+        @pet.Description
+      </div>
+
+
+      <div class="pet-info p-2">
+        <table class="table table-responsive">
+          <tr>
+            <td>
+              @Html.DisplayNameFor(_ => pet.Name)
+            </td>
+            <td>
+              @Html.DisplayFor(_ => pet.Name)
+            </td>
+          </tr>
+
+          <tr>
+            <td>
+              @Html.DisplayNameFor(_ => pet.Species) /
+              @Html.DisplayNameFor(_ => pet.Breed)
+            </td>
+            <td>
+              @Html.DisplayFor(_ => pet.Species),
+              @Html.DisplayFor(_ => pet.Breed.Name)
+            </td>
+          </tr>
+
+          <tr>
+            <td>
+              @Html.DisplayNameFor(_ => pet.Gender)
+            </td>
+            <td>
+              @Html.DisplayFor(_ => pet.Gender)
+            </td>
+          </tr>
+
+          <tr>
+            <td>
+              @Html.DisplayNameFor(_ => pet.BirthDate)
+            </td>
+            <td>
+              @pet.BirthDate.CultureDate()
+              @pet.Age.NumberSuffix("rok", "lata", "lat")
+            </td>
+          </tr>
+
+          <tr>
+            <td>
+              @Html.DisplayNameFor(_ => pet.Weight)
+            </td>
+            <td>
+              @Html.DisplayFor(_ => pet.Weight)
+              kg
+            </td>
+          </tr>
+
+          <tr>
+            <td>
+              @Html.DisplayNameFor(_ => pet.AdmissionDate)
+            </td>
+            <td>
+              @pet.AdmissionDate.CultureDateTime()
+            </td>
+          </tr>
+
+          <tr>
+            <td>
+              @Html.DisplayNameFor(_ => pet.AdoptionStatus)
+            </td>
+            <td>
+              @Html.DisplayFor(_ => pet.AdoptionStatus)
+            </td>
+          </tr>
+
+        </table>
+      </div>
+    </div>
+
+  </div>
+
+</div>

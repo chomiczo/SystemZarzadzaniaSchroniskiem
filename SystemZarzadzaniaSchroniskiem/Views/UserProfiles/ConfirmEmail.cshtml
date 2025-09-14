@@ -1,0 +1,25 @@
+@{
+  ViewData["Title"] = "Potwierdzenie adresu e-mail";
+}
+
+<div class="container">
+  <div class="row">
+    <div class="col">
+      <div class="alert alert-@ViewBag.MessageType.ToString().ToLower()">
+        <h4 class="alert-heading">
+          <i class="fas fa-envelope-circle-check"></i>
+          Potwierdzenie adresu e-mail
+        </h4>
+        <p>
+          @ViewBag.Message
+        </p>
+        @if (ViewBag.MessageType == ViewMessageType.Success)
+        {
+          <a class="btn btn-success text-white" asp-action="Login">
+            Przejdź do logowania
+          </a>
+        }
+      </div>
+    </div>
+  </div>
+</div>

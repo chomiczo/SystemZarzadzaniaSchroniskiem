@@ -1,0 +1,58 @@
+@using Microsoft.AspNetCore.Identity
+@using Microsoft.AspNetCore.Mvc.ModelBinding
+@model UserProfile.RegisterInput
+
+@{
+  ViewData["Title"] = "Rejestracja";
+}
+
+<page-layout title="@ViewData["Title"]" title-icon="fa-id-card">
+  <form asp-action="Register" method="post">
+
+    <div class="row">
+      <div class="col-md-8 offset-md-2">
+        <div class="container d-flex gap-2 flex-column">
+
+          @if (!Html.ViewContext.ModelState.IsValid)
+          {
+            <div class="row alert alert-danger" asp-validation-summary="ModelOnly"></div>
+          }
+
+          <div class="row">
+            @Html.FormInputFor(p => p.Email)
+          </div>
+
+          <div class="row">
+            <div class="col-md-6">@Html.FormInputFor(p => p.FirstName)</div>
+            <div class="col-md-6">@Html.FormInputFor(p => p.LastName)</div>
+          </div>
+
+          <div class="row">
+            @Html.FormInputFor(p => p.Password, "password")
+          </div>
+
+          <div class="row">
+            @Html.FormInputFor(p => p.ConfirmPassword, "password")
+          </div>
+
+          <div class="row">
+            <div class="col">
+              <div class="input-group">
+                <button class="form-control btn btn-primary">
+                  Zarejestruj się
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </form>
+</page-layout>
+
+@section Scripts {
+  @{
+    @* await Html.RenderPartialAsync("_ValidationScriptsPartial"); *@
+    @* <script src="@Url.Content("~/js/PetsForm.js")"></script> *@
+  }
+}

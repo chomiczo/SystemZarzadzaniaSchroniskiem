@@ -1,0 +1,46 @@
+@model Pet
+@{
+  Pet pet = Model;
+}
+
+<div class="container d-flex gap-4 flex-column">
+  <div class="row">
+    <h1 class="page-title">Adopcja</h1>
+  </div>
+  <div class="row" id="details">
+    <partial name="_PetDetails" model="@pet" />
+  </div>
+  <div class="row">
+    <div class="col">
+      <h2 class="page-title">Jak przebiega adopcja?</h2>
+      <ul class="list-group">
+        <li class="list-group-item">
+          Umów się na spotkanie w sprawie adpocji, podczas którego poznasz bliżej
+          wybrane zwierzę
+        </li>
+        <li class="list-group-item">
+          Po spotkaniu i zapoznaniu się ze zwierzakiem będziesz mógł wziąć go
+          do domu na okres próbny
+        </li>
+        <li class="list-group-item">
+          Po okresie próbnym możesz zwrócić zwierzę albo dokończyć proces adopcji
+        </li>
+      </ul>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col">
+      <a class="btn btn-primary" href=@Url.Action("AdoptionMeeting", "Appointments", new { PetId = @Model.Id })>
+        Zapisz się na spotkanie ws. adopcji
+      </a>
+    </div>
+  </div>
+</div>
+
+
+<style>
+  #details,
+  .pet-info * {
+    background-color: var(--sc-white-20) !important;
+  }
+</style>

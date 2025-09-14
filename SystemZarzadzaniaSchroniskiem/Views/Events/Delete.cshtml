@@ -1,0 +1,21 @@
+@model Event
+@{
+  ViewData["Title"] = "Usuń wydarzenie";
+}
+
+<page-layout title="@ViewData["Title"]" title-icon="fa-calendar-xmark">
+
+  <div class="row">
+    <div class="alert alert-danger text-center">
+      <p>
+        Czy jesteś pewien, że chcesz usunąć wydarzenie <strong>@Model.Name</strong>?
+      </p>
+
+      <form asp-action="Delete" method="post">
+        <input type="hidden" asp-for="Id" />
+        <input type="submit" value="Usuń" class="btn btn-danger text-white" />
+      </form>
+    </div>
+  </div>
+
+</page-layout>

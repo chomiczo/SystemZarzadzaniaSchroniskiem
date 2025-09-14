@@ -15,13 +15,10 @@ namespace SystemZarzadzaniaSchroniskiem.Areas.Identity.Data
         { }
     }
 
-    public class SystemZarzadzaniaSchroniskiemDbContext : IdentityDbContext<IdentityUser>
+    public class SchroniskoDbContext(
+        DbContextOptions<SchroniskoDbContext> options
+        ) : IdentityDbContext<IdentityUser>(options)
     {
-        public SystemZarzadzaniaSchroniskiemDbContext(DbContextOptions<SystemZarzadzaniaSchroniskiemDbContext> options)
-            : base(options)
-        {
-        }
-
         protected override void ConfigureConventions(ModelConfigurationBuilder configurationBuilder)
         {
             configurationBuilder.Properties<List<string>>().HaveConversion<StringListConverter>();
@@ -31,16 +28,22 @@ namespace SystemZarzadzaniaSchroniskiem.Areas.Identity.Data
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
-            // Customize the ASP.NET Identity model and override the defaults if needed.
-            // For example, you can rename the ASP.NET Identity table names and more.
-            // Add your customizations after calling base.OnModelCreating(builder);
+            builder.Entity<Pet>().HasMany(o => o.HealthRecords).WithOne(hr => hr.Pet).HasForeignKey(hr => hr.PetId);
+            builder.Entity<Event>().HasMany(e => e.Attendees).WithOne(a => a.Event).HasForeignKey(a => a.EventId);
+            builder.Entity<Event>().HasMany(e => e.Pets).WithOne(a => a.Event).HasForeignKey(a => a.EventId);
         }
 
-        public DbSet<Userek> Userek { get; set; }
+        public DbSet<UserProfile> UserProfiles { get; set; }
         public DbSet<BugReport> BugReports { get; set; }
         public DbSet<BugReportComment> BugReportComments { get; set; }
         public DbSet<Pet> Pets { get; set; }
         public DbSet<Breed> Breeds { get; set; }
         public DbSet<HealthRecord> HealthRecords { get; set; }
+        public DbSet<Appointment> Appointments { get; set; }
+        public DbSet<Event> Events { get; set; }
+        public DbSet<EventAttendee> EventAttendees { get; set; }
+        public DbSet<EventPet> EventPets { get; set; }
+        public DbSet<Timetable> Timetables { get; set; }
     }
+
 }

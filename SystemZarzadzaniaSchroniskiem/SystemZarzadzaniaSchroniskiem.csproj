@@ -22,12 +22,23 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Helpers\" />
-    <Folder Include="Migrations\" />
+    <!-- <None Include="wwwroot/css/**/*.css" Watch="true"  /> -->
+    <Watch Include="wwwroot/css/**/*.scss" />
   </ItemGroup>
 
-  <Target Name="Sass Compile" BeforeTargets="Build">
-    <Exec Command="dotnet webcompiler -r wwwroot\css" />
+  <ItemGroup>
+    <Content Remove="compilerconfig.json" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="compilerconfig.json" />
+  </ItemGroup>
+
+  <Target Name="SassCompile" AfterTargets="CoreCompile" Inputs="wwwroot/css/**/*.scss" Outputs="wwwroot/css/**/*.css">
+    <Exec Command="dotnet webcompiler -r wwwroot/css Views -c webcompilerconfiguration.json" StandardOutputImportance="High" />
   </Target>
 
+  <!-- <Target Name="SassCompileOnChange" Inputs="wwwroot/css/**/*.scss" Outputs="wwwroot/css/**/*.css" BeforeTargets="Build;Run;Watch">
+    <Exec Command="dotnet webcompiler -r wwwroot/css Views -c webcompilerconfiguration.json" />
+  </Target> -->
 </Project>
