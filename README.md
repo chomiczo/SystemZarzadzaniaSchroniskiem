@@ -1,6 +1,6 @@
 # SystemZarzadzaniaSchroniskiem
 
-**SystemZarzadzaniaSchroniskiem** to aplikacja webowa wspierająca pracę schronisk dla zwierząt. Umożliwia obsługę procesów związanych z rejestracją, adopcjami, ewidencją zwierząt oraz zarządzaniem personelem i wolontariuszami. System został stworzony w C# z użyciem ASP.NET Core MVC oraz Entity Framework.
+**SystemZarzadzaniaSchroniskiem** to aplikacja webowa wspierająca pracę schronisk dla zwierząt. Umożliwia obsługę procesów związanych z rejestracją, adopcjami, ewidencją zwierząt oraz zarządzaniem personelem i wolontariuszami. System został stworzony w C# z użyciem ASP.NET Core MVC oraz Entity Framework Core.
 
 ## Technologie
 
